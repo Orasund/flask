@@ -204,7 +204,7 @@ init _ =
       , editing = 0
       }
     , Http.get
-                { url = "https://raw.githubusercontent.com/Orasund/flask/master/Deck/base.json"
+                { url = "https://raw.githubusercontent.com/Orasund/flask/master/deck/base.json"
                 , expect =
                     Http.expectString
                         (\result ->

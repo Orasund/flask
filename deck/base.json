@@ -1,0 +1,130 @@
+[
+  {
+    "amount": 1,
+    "img": "https://openmoji.org/data/color/svg/1F4A1.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 1,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Invent"
+  },
+  {
+    "amount": 1,
+    "img": "https://openmoji.org/data/color/svg/1F52C.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 1,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Invent"
+  },
+  {
+    "amount": 1,
+    "img": "https://openmoji.org/data/color/svg/2694.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 1,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Attack"
+  },
+  {
+    "amount": 1,
+    "img": "https://openmoji.org/data/color/svg/1F5E1.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 1,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": " Sabotage"
+  },
+  {
+    "amount": 1,
+    "img": "https://openmoji.org/data/color/svg/1F4B8.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 1
+    },
+    "name": " Profit"
+  },
+  {
+    "amount": 1,
+    "img": "https://openmoji.org/data/color/svg/1F502.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 0,
+      "y2": true,
+      "y1": 0
+    },
+    "name": " Reboot"
+  },
+  {
+    "amount": 1,
+    "img": "https://openmoji.org/data/color/svg/1F504.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 1,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Exchange "
+  },
+  {
+    "amount": 1,
+    "img": "https://openmoji.org/data/color/svg/2755.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": true,
+      "g1": 0,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": " Reaction"
+  }
+]

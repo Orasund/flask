@@ -369,7 +369,7 @@ view model =
                 [ Element.el Input.label <| Element.text label
                 , Element.row ([ Element.width <| Element.fill ] ++ Grid.simple)
                     [ Input.button
-                        ([ Element.width <| Element.fill, Element.alignLeft ] ++ Button.simple)
+                        ([ Element.width <| Element.fill, Element.alignLeft ] ++ Button.simple ++ Color.primary)
                         { onPress = Just <| onDecrease
                         , label = Element.text <| "-"
                         }
@@ -403,7 +403,7 @@ view model =
         if model.showGui then
             Element.row (Grid.spacedEvenly ++ [ Element.width Element.fill ]) <|
                 [ Element.el
-                    [ Element.width Element.fill] <|
+                    [ Element.width <| Element.fill, Element.scrollbarY,Element.height <| Element.px <| 650] <|
                     displayCards
                 , Element.column (Grid.simple ++ [ Element.width Element.shrink, Element.alignRight ]) <|
                     [ Element.column (Framework.Card.simple ++ Grid.simple) <|
@@ -427,7 +427,8 @@ view model =
                                         , value = editedCard.amount
                                         , label = "Amount"
                                         }
-                                    , Input.checkbox [] <|
+                                    , Element.row Grid.spacedEvenly <|
+                                        [ Input.checkbox [] <|
                                         { onChange =
                                             \b ->
                                                 (if b then
@@ -454,7 +455,7 @@ view model =
                                         , icon = Input.defaultCheckbox
                                         , checked = y2
                                         , label = Input.labelLeft Input.label <| Element.text <| toTitle <| Y2
-                                        }
+                                        }]
                                     , numberInput
                                         { onIncrease = AddComponent B2
                                         , onDecrease = RemoveComponent B2

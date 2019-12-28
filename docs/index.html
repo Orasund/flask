@@ -14528,6 +14528,8 @@ var $Orasund$elm_ui_framework$Framework$Color$primary = _List_fromArray(
 		$mdgriffith$elm_ui$Element$Background$color($Orasund$elm_ui_framework$Framework$Color$turquoise),
 		$mdgriffith$elm_ui$Element$Border$color($Orasund$elm_ui_framework$Framework$Color$turquoise)
 	]);
+var $mdgriffith$elm_ui$Internal$Flag$overflow = $mdgriffith$elm_ui$Internal$Flag$flag(20);
+var $mdgriffith$elm_ui$Element$scrollbarY = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.scrollbarsY);
 var $Orasund$elm_ui_framework$Framework$Color$grey = A3($mdgriffith$elm_ui$Element$rgb255, 122, 122, 122);
 var $Orasund$elm_ui_framework$Framework$Color$lightGrey = A3($mdgriffith$elm_ui$Element$rgb255, 219, 219, 219);
 var $mdgriffith$elm_ui$Internal$Model$Hover = {$: 'Hover'};
@@ -14774,7 +14776,6 @@ var $mdgriffith$elm_ui$Element$Input$calcMoveToCompensateForPadding = function (
 			$elm$core$Basics$floor(vSpace / 2));
 	}
 };
-var $mdgriffith$elm_ui$Internal$Flag$overflow = $mdgriffith$elm_ui$Internal$Flag$flag(20);
 var $mdgriffith$elm_ui$Element$clip = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.clip);
 var $mdgriffith$elm_ui$Element$Input$darkGrey = A3($mdgriffith$elm_ui$Element$rgb, 186 / 255, 189 / 255, 182 / 255);
 var $mdgriffith$elm_ui$Element$Input$defaultTextPadding = A2($mdgriffith$elm_ui$Element$paddingXY, 12, 12);
@@ -15172,7 +15173,6 @@ var $mdgriffith$elm_ui$Element$Input$renderPlaceholder = F3(
 					placeholderAttrs)),
 			placeholderEl);
 	});
-var $mdgriffith$elm_ui$Element$scrollbarY = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.scrollbarsY);
 var $elm$html$Html$span = _VirtualDom_node('span');
 var $elm$html$Html$Attributes$spellcheck = $elm$html$Html$Attributes$boolProperty('spellcheck');
 var $mdgriffith$elm_ui$Element$Input$spellcheck = A2($elm$core$Basics$composeL, $mdgriffith$elm_ui$Internal$Model$Attr, $elm$html$Html$Attributes$spellcheck);
@@ -15482,7 +15482,7 @@ var $author$project$Main$view = function (model) {
 										$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 										$mdgriffith$elm_ui$Element$alignLeft
 									]),
-								$Orasund$elm_ui_framework$Framework$Button$simple),
+								_Utils_ap($Orasund$elm_ui_framework$Framework$Button$simple, $Orasund$elm_ui_framework$Framework$Color$primary)),
 							{
 								label: $mdgriffith$elm_ui$Element$text('-'),
 								onPress: $elm$core$Maybe$Just(onDecrease)
@@ -15664,7 +15664,10 @@ var $author$project$Main$view = function (model) {
 					$mdgriffith$elm_ui$Element$el,
 					_List_fromArray(
 						[
-							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+							$mdgriffith$elm_ui$Element$scrollbarY,
+							$mdgriffith$elm_ui$Element$height(
+							$mdgriffith$elm_ui$Element$px(650))
 						]),
 					displayCards),
 					A2(
@@ -15719,35 +15722,41 @@ var $author$project$Main$view = function (model) {
 										numberInput(
 										{label: 'Amount', onDecrease: $author$project$Main$DecreaseAmount, onIncrease: $author$project$Main$IncreaseAmount, value: editedCard.amount}),
 										A2(
-										$mdgriffith$elm_ui$Element$Input$checkbox,
-										_List_Nil,
-										{
-											checked: g2,
-											icon: $mdgriffith$elm_ui$Element$Input$defaultCheckbox,
-											label: A2(
-												$mdgriffith$elm_ui$Element$Input$labelLeft,
-												$Orasund$elm_ui_framework$Framework$Input$label,
-												$mdgriffith$elm_ui$Element$text(
-													toTitle($author$project$Data$Base$G2))),
-											onChange: function (b) {
-												return (b ? $author$project$Main$AddComponent : $author$project$Main$RemoveComponent)($author$project$Data$Base$G2);
-											}
-										}),
-										A2(
-										$mdgriffith$elm_ui$Element$Input$checkbox,
-										_List_Nil,
-										{
-											checked: y2,
-											icon: $mdgriffith$elm_ui$Element$Input$defaultCheckbox,
-											label: A2(
-												$mdgriffith$elm_ui$Element$Input$labelLeft,
-												$Orasund$elm_ui_framework$Framework$Input$label,
-												$mdgriffith$elm_ui$Element$text(
-													toTitle($author$project$Data$Base$Y2))),
-											onChange: function (b) {
-												return (b ? $author$project$Main$AddComponent : $author$project$Main$RemoveComponent)($author$project$Data$Base$Y2);
-											}
-										}),
+										$mdgriffith$elm_ui$Element$row,
+										$Orasund$elm_ui_framework$Framework$Grid$spacedEvenly,
+										_List_fromArray(
+											[
+												A2(
+												$mdgriffith$elm_ui$Element$Input$checkbox,
+												_List_Nil,
+												{
+													checked: g2,
+													icon: $mdgriffith$elm_ui$Element$Input$defaultCheckbox,
+													label: A2(
+														$mdgriffith$elm_ui$Element$Input$labelLeft,
+														$Orasund$elm_ui_framework$Framework$Input$label,
+														$mdgriffith$elm_ui$Element$text(
+															toTitle($author$project$Data$Base$G2))),
+													onChange: function (b) {
+														return (b ? $author$project$Main$AddComponent : $author$project$Main$RemoveComponent)($author$project$Data$Base$G2);
+													}
+												}),
+												A2(
+												$mdgriffith$elm_ui$Element$Input$checkbox,
+												_List_Nil,
+												{
+													checked: y2,
+													icon: $mdgriffith$elm_ui$Element$Input$defaultCheckbox,
+													label: A2(
+														$mdgriffith$elm_ui$Element$Input$labelLeft,
+														$Orasund$elm_ui_framework$Framework$Input$label,
+														$mdgriffith$elm_ui$Element$text(
+															toTitle($author$project$Data$Base$Y2))),
+													onChange: function (b) {
+														return (b ? $author$project$Main$AddComponent : $author$project$Main$RemoveComponent)($author$project$Data$Base$Y2);
+													}
+												})
+											])),
 										numberInput(
 										{
 											label: toTitle($author$project$Data$Base$B2),

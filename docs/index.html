@@ -13688,10 +13688,13 @@ var $author$project$View$Card$view = function (_v0) {
 						]),
 					$author$project$View$Card$textField(
 						((hasDesc && function () {
-							if (effect.$ === 'Plant') {
-								return effectsAmount <= 1;
-							} else {
-								return effectsAmount <= 2;
+							switch (effect.$) {
+								case 'Plant':
+									return effectsAmount <= 1;
+								case 'Discard':
+									return effectsAmount <= 1;
+								default:
+									return effectsAmount <= 2;
 							}
 						}()) ? $elm$core$Basics$identity : function (field) {
 							return _Utils_update(

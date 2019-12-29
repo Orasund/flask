@@ -73,6 +73,9 @@ view { name, cost, effects, hasDesc, code, img } =
                                             && (case effect of
                                                     Plant ->
                                                         effectsAmount <= 1
+                                                    
+                                                    Discard _ ->
+                                                        effectsAmount <= 1
 
                                                     _ ->
                                                         effectsAmount <= 2

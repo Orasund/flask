@@ -13597,7 +13597,7 @@ var $author$project$Data$Effect$toTextField = function (effect) {
 		case 'Discard':
 			var n = effect.a;
 			return {
-				desc: 'Ein Gegner legt ' + (((n <= 1) ? 'eine Handkarte oder Reaktionskarte' : ($elm$core$String$fromInt(n) + ' Handkarten und/oder Reaktionskarten')) + ' der eigenen Wahl auf den Ablagestape. Der Gegner hat das Spiel verloren sobald am Anfang des eigenen Zuges keine Karte mehr auf den Nachziehstapel liegt.'),
+				desc: 'Ein Gegner legt ' + (((n <= 1) ? 'eine Handkarte oder Reaktionskarte' : ($elm$core$String$fromInt(n) + ' Handkarten und/oder Reaktionskarten')) + ' der eigenen Wahl auf den Ablagestape. Hat der Gegner zu wenig Karten, werden die übrigen Karten vom Nachziehstapel genommen. Der Gegner hat das Spiel verloren sobald am Anfang des eigenen Zuges keine Karte mehr auf den Nachziehstapel liegt.'),
 				title: 'Action: -' + ($elm$core$String$fromInt(n) + ' Cards')
 			};
 		case 'Reboot':
@@ -13824,7 +13824,7 @@ var $author$project$View$Card$view = function (_v0) {
 						_List_fromArray(
 							[
 								$mdgriffith$elm_ui$Element$text(code),
-								$mdgriffith$elm_ui$Element$text('v0.2.1')
+								$mdgriffith$elm_ui$Element$text('v0.3.0')
 							])))
 				])));
 };

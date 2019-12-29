@@ -148,7 +148,7 @@ toTextField effect =
                         else
                             String.fromInt n ++ " Handkarten und/oder Reaktionskarten"
                        )
-                    ++ " der eigenen Wahl auf den Ablagestape. Der Gegner hat das Spiel verloren sobald am Anfang des eigenen Zuges keine Karte mehr auf den Nachziehstapel liegt."
+                    ++ " der eigenen Wahl auf den Ablagestape. Hat der Gegner zu wenig Karten, werden die übrigen Karten vom Nachziehstapel genommen. Der Gegner hat das Spiel verloren sobald am Anfang des eigenen Zuges keine Karte mehr auf den Nachziehstapel liegt."
             }
 
         Reboot ->

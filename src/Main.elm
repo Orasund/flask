@@ -29,16 +29,36 @@ import Task
 import View.Card as Card
 
 
+type alias ConfigForm =
+    { cardsPerPage : String
+    }
+
+
+type ConfigField
+    = CardsPerPage String
+    | BlackAndWhite Bool
+
+
+type alias Config =
+    { cardsPerPage : Int
+    , blackAndWhite : Bool
+    }
+
+
 type alias Model =
-    { cards : Array Card
-    , cardsPerPage : Int
+    { config : Config
+    , configForm : ConfigForm
+    , cards : Array Card
     , showGui : Bool
+    , showConfig : Bool
     , editing : Int
     }
 
 
 type Msg
     = ToggledShowGui
+    | ToggledShowConfig Bool
+    | ChangedConfigField ConfigField
     | AddComponent Base
     | RemoveComponent Base
     | IncreaseAmount
@@ -67,6 +87,31 @@ update msg model =
     case msg of
         ToggledShowGui ->
             ( { model | showGui = not model.showGui }, Cmd.none )
+
+        ToggledShowConfig bool ->
+            ( { model | showConfig = bool }, Cmd.none )
+
+        ChangedConfigField configField ->
+            let
+                configForm : ConfigForm
+                configForm =
+                    model.configForm
+
+                config : Config
+                config =
+                    model.config
+            in
+            ( case configField of
+                CardsPerPage string ->
+                    { model
+                        | configForm = { configForm | cardsPerPage = string }
+                        , config = { config | cardsPerPage = String.toInt string |> Maybe.withDefault config.cardsPerPage }
+                    }
+
+                BlackAndWhite bool ->
+                    { model | config = { config | blackAndWhite = bool } }
+            , Cmd.none
+            )
 
         IncreaseAmount ->
             ( { model
@@ -203,9 +248,25 @@ update msg model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
+    let
+        cardsPerPage : Int
+        cardsPerPage =
+            10
+
+        blackAndWhite : Bool
+        blackAndWhite =
+            False
+    in
     ( { cards = Array.empty
-      , cardsPerPage = 10
+      , config =
+            { cardsPerPage = cardsPerPage
+            , blackAndWhite = blackAndWhite
+            }
+      , configForm =
+            { cardsPerPage = cardsPerPage |> String.fromInt
+            }
       , showGui = True
+      , showConfig = False
       , editing = 0
       }
     , Http.get
@@ -229,8 +290,8 @@ subscriptions _ =
     Sub.none
 
 
-card : Card -> List (Element msg)
-card ({ name, hasDesc, img, amount } as config) =
+card : Bool -> Card -> List (Element msg)
+card blackAndWhite ({ name, hasDesc, img, amount } as config) =
     let
         composition =
             config.composition
@@ -245,7 +306,8 @@ card ({ name, hasDesc, img, amount } as config) =
                     { cost = ( [], 0 ), effects = [] }
     in
     Card.view
-        { name = name
+        { blackAndWhite = blackAndWhite
+        , name = name
         , cost = composition.cost |> Tuple.mapFirst Elem.order
         , effects = composition.effects |> Effect.simplify
         , hasDesc = hasDesc
@@ -266,7 +328,7 @@ view model =
                         List.indexedMap
                             (\i c ->
                                 c
-                                    |> card
+                                    |> card model.config.blackAndWhite
                                     |> List.head
                                     |> Maybe.map
                                         (\label ->
@@ -325,12 +387,12 @@ view model =
                             >> List.filterMap identity
 
                     else
-                        List.map card >> List.concat
+                        List.map (card model.config.blackAndWhite) >> List.concat
                    )
 
         emptyCards : Int
         emptyCards =
-            model.cardsPerPage - (cards |> List.length) |> modBy model.cardsPerPage
+            model.config.cardsPerPage - (cards |> List.length) |> modBy model.config.cardsPerPage
 
         displayCards : Element Msg
         displayCards =
@@ -362,7 +424,7 @@ view model =
                         ]
 
                       else
-                        Card.empty emptyCards |> card
+                        Card.empty emptyCards |> card model.config.blackAndWhite
                     ]
 
         editedCard : Card
@@ -376,23 +438,22 @@ view model =
             Element.row [ Element.spacing 5, Element.width <| Element.fill ] <|
                 [ Element.el Input.label <| Element.text label
                 , Element.row ([ Element.width <| Element.fill ] ++ Grid.simple)
-                    [ Input.button
-                        ([ Element.width <| Element.fill, Element.alignLeft ] ++ Button.simple ++ Color.primary)
-                        { onPress = Just <| onDecrease
-                        , label = Element.text <| "-"
-                        }
-                    , Element.el [ Font.center, Element.width <| Element.fillPortion 2 ] <|
+                    [ Element.el [ Font.center, Element.width <| Element.fillPortion 2 ] <|
                         Element.text <|
                             String.fromInt <|
                                 value
-                    , Input.button
-                        ([ Element.width <| Element.fill, Element.alignRight ]
-                            ++ Button.simple
-                            ++ Color.success
-                        )
-                        { onPress = Just <| onIncrease
-                        , label = Element.text <| "+"
-                        }
+                    , Element.row Grid.compact <|
+                        [ Input.button
+                            (Button.groupLeft ++ [ Element.width <| Element.fill, Element.alignLeft ])
+                            { onPress = Just <| onDecrease
+                            , label = Element.text <| "-"
+                            }
+                        , Input.button
+                            (Button.groupRight ++ Color.primary ++ [ Element.width <| Element.fill, Element.alignRight ])
+                            { onPress = Just <| onIncrease
+                            , label = Element.text <| "+"
+                            }
+                        ]
                     ]
                 ]
 
@@ -414,100 +475,143 @@ view model =
                   <|
                     displayCards
                 , Element.column (Grid.simple ++ [ Element.width Element.shrink, Element.alignRight ]) <|
-                    [ Element.column (Framework.Card.simple ++ Grid.simple) <|
-                        (editedCard.composition
-                            |> (\{ g1, g2, r1, r2, b1, b2, y1, y2 } ->
-                                    [ Input.text Input.simple
-                                        { onChange = ChangedName
-                                        , text = editedCard.name
-                                        , placeholder = Nothing
-                                        , label = Input.labelLeft Input.label <| Element.text "Name"
-                                        }
-                                    , Input.text Input.simple
-                                        { onChange = ChangedImg
-                                        , text = editedCard.img
-                                        , placeholder = Nothing
-                                        , label = Input.labelLeft Input.label <| Element.text "Image Link"
-                                        }
-                                    , numberInput
-                                        { onIncrease = IncreaseAmount
-                                        , onDecrease = DecreaseAmount
-                                        , value = editedCard.amount
-                                        , label = "Amount"
-                                        }
-                                    , Element.row Grid.spacedEvenly <|
-                                        [ Input.checkbox [] <|
-                                            { onChange =
-                                                \b ->
-                                                    (if b then
-                                                        AddComponent
+                    [ Element.column Grid.compact <|
+                        [ Element.row Grid.spaceEvenly <|
+                            [ Input.button
+                                (Button.groupTop
+                                    ++ (if not model.showConfig then
+                                            Color.info
 
-                                                     else
-                                                        RemoveComponent
-                                                    )
-                                                        G2
-                                            , icon = Input.defaultCheckbox
-                                            , checked = g2
-                                            , label = Input.labelLeft Input.label <| Element.text <| toTitle <| G2
-                                            }
-                                        , Input.checkbox [] <|
-                                            { onChange =
-                                                \b ->
-                                                    (if b then
-                                                        AddComponent
+                                        else
+                                            []
+                                       )
+                                )
+                                { onPress = Just <| ToggledShowConfig <| False
+                                , label = Element.text <| "Edit Card"
+                                }
+                            , Input.button
+                                (Button.groupTop
+                                    ++ (if model.showConfig then
+                                            Color.info
 
-                                                     else
-                                                        RemoveComponent
-                                                    )
-                                                        Y2
-                                            , icon = Input.defaultCheckbox
-                                            , checked = y2
-                                            , label = Input.labelLeft Input.label <| Element.text <| toTitle <| Y2
-                                            }
-                                        ]
-                                    , numberInput
-                                        { onIncrease = AddComponent B2
-                                        , onDecrease = RemoveComponent B2
-                                        , value = b2
-                                        , label = B2 |> toTitle
-                                        }
-                                    , numberInput
-                                        { onIncrease = AddComponent B1
-                                        , onDecrease = RemoveComponent B1
-                                        , value = b1
-                                        , label = B1 |> toTitle
-                                        }
-                                    , numberInput
-                                        { onIncrease = AddComponent Y1
-                                        , onDecrease = RemoveComponent Y1
-                                        , value = y1
-                                        , label = Y1 |> toTitle
-                                        }
-                                    , numberInput
-                                        { onIncrease = AddComponent G1
-                                        , onDecrease = RemoveComponent G1
-                                        , value = g1
-                                        , label = G1 |> toTitle
-                                        }
-                                    , numberInput
-                                        { onIncrease = AddComponent R1
-                                        , onDecrease = RemoveComponent R1
-                                        , value = r1
-                                        , label = R1 |> toTitle
-                                        }
-                                    , numberInput
-                                        { onIncrease = AddComponent R2
-                                        , onDecrease = RemoveComponent R2
-                                        , value = r2
-                                        , label = R2 |> toTitle
-                                        }
-                                    , Input.button (Button.simple ++ Color.danger ++ [ Element.alignRight ]) <|
-                                        { onPress = Just DeletedSelected
-                                        , label = Element.text <| "Remove"
-                                        }
-                                    ]
-                               )
-                        )
+                                        else
+                                            []
+                                       )
+                                )
+                                { onPress = Just <| ToggledShowConfig <| True
+                                , label = Element.text <| "Configuration"
+                                }
+                            ]
+                        , Element.column (Framework.Card.simple ++ Grid.simple ++ [ Border.rounded 0 ]) <|
+                            if model.showConfig then
+                                [ Input.text Input.simple
+                                    { onChange = ChangedConfigField << CardsPerPage
+                                    , text = model.configForm.cardsPerPage
+                                    , placeholder = Nothing
+                                    , label = Input.labelLeft Input.label <| Element.text "Cards Per Page"
+                                    }
+                                , Input.checkbox [] <|
+                                    { onChange = ChangedConfigField << BlackAndWhite
+                                    , icon = Input.defaultCheckbox
+                                    , checked = model.config.blackAndWhite
+                                    , label = Input.labelLeft Input.label <| Element.text <| "Black and White Mode"
+                                    }
+                                ]
+
+                            else
+                                editedCard.composition
+                                    |> (\{ g1, g2, r1, r2, b1, b2, y1, y2 } ->
+                                            [ Input.text Input.simple
+                                                { onChange = ChangedName
+                                                , text = editedCard.name
+                                                , placeholder = Nothing
+                                                , label = Input.labelLeft Input.label <| Element.text "Name"
+                                                }
+                                            , Input.text Input.simple
+                                                { onChange = ChangedImg
+                                                , text = editedCard.img
+                                                , placeholder = Nothing
+                                                , label = Input.labelLeft Input.label <| Element.text "Image Link"
+                                                }
+                                            , numberInput
+                                                { onIncrease = IncreaseAmount
+                                                , onDecrease = DecreaseAmount
+                                                , value = editedCard.amount
+                                                , label = "Amount"
+                                                }
+                                            , Element.row Grid.spacedEvenly <|
+                                                [ Input.checkbox [] <|
+                                                    { onChange =
+                                                        \b ->
+                                                            (if b then
+                                                                AddComponent
+
+                                                             else
+                                                                RemoveComponent
+                                                            )
+                                                                G2
+                                                    , icon = Input.defaultCheckbox
+                                                    , checked = g2
+                                                    , label = Input.labelLeft Input.label <| Element.text <| toTitle <| G2
+                                                    }
+                                                , Input.checkbox [] <|
+                                                    { onChange =
+                                                        \b ->
+                                                            (if b then
+                                                                AddComponent
+
+                                                             else
+                                                                RemoveComponent
+                                                            )
+                                                                Y2
+                                                    , icon = Input.defaultCheckbox
+                                                    , checked = y2
+                                                    , label = Input.labelLeft Input.label <| Element.text <| toTitle <| Y2
+                                                    }
+                                                ]
+                                            , numberInput
+                                                { onIncrease = AddComponent B2
+                                                , onDecrease = RemoveComponent B2
+                                                , value = b2
+                                                , label = B2 |> toTitle
+                                                }
+                                            , numberInput
+                                                { onIncrease = AddComponent B1
+                                                , onDecrease = RemoveComponent B1
+                                                , value = b1
+                                                , label = B1 |> toTitle
+                                                }
+                                            , numberInput
+                                                { onIncrease = AddComponent Y1
+                                                , onDecrease = RemoveComponent Y1
+                                                , value = y1
+                                                , label = Y1 |> toTitle
+                                                }
+                                            , numberInput
+                                                { onIncrease = AddComponent G1
+                                                , onDecrease = RemoveComponent G1
+                                                , value = g1
+                                                , label = G1 |> toTitle
+                                                }
+                                            , numberInput
+                                                { onIncrease = AddComponent R1
+                                                , onDecrease = RemoveComponent R1
+                                                , value = r1
+                                                , label = R1 |> toTitle
+                                                }
+                                            , numberInput
+                                                { onIncrease = AddComponent R2
+                                                , onDecrease = RemoveComponent R2
+                                                , value = r2
+                                                , label = R2 |> toTitle
+                                                }
+                                            , Input.button (Button.simple ++ Color.danger ++ [ Element.alignRight ]) <|
+                                                { onPress = Just DeletedSelected
+                                                , label = Element.text <| "Remove"
+                                                }
+                                            ]
+                                       )
+                        ]
                     , Element.row Grid.simple
                         [ Input.button (Button.simple ++ Color.primary) <|
                             { onPress = Just ToggledShowGui

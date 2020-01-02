@@ -7,8 +7,8 @@ import Html
 import Html.Attributes as Attributes
 
 
-text : Int -> String -> Element msg
-text int string =
+text : Bool -> Int -> String -> Element msg
+text blackAndWhite int string =
     let
         scale : Float
         scale =
@@ -29,7 +29,14 @@ text int string =
                 (\list ->
                     Html.img
                         [ Attributes.src <|
-                            "https://openmoji.org/data/color/svg/"
+                            "https://openmoji.org/data/"
+                                ++ (if blackAndWhite then
+                                        "black"
+
+                                    else
+                                        "color"
+                                   )
+                                ++ "/svg/"
                                 ++ (List.intersperse "-" list |> String.join "" |> String.toUpper)
                                 ++ ".svg"
                         , Attributes.height <| round <| (*) scale <| toFloat int

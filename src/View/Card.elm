@@ -14,8 +14,8 @@ import Svg
 import View
 
 
-textField : { title : String, desc : String } -> Element msg
-textField { title, desc } =
+textField : Bool -> { title : String, desc : String } -> Element msg
+textField blackAndWhite { title, desc } =
     case desc of
         "" ->
             Element.el
@@ -24,7 +24,7 @@ textField { title, desc } =
                 , Font.center
                 ]
             <|
-                View.text (round <| 2 * fontMult) <|
+                View.text blackAndWhite (round <| 2 * fontMult) <|
                     title
 
         text ->
@@ -36,7 +36,7 @@ textField { title, desc } =
                 [ Element.el
                     [ Font.size <| round <| 2 * fontMult, Element.centerX ]
                   <|
-                    View.text (round <| 2 * fontMult) <|
+                    View.text blackAndWhite (round <| 2 * fontMult) <|
                         title
                 , Element.paragraph
                     [ Element.width <| Element.fill
@@ -45,7 +45,7 @@ textField { title, desc } =
                     ]
                   <|
                     List.singleton <|
-                        View.text (round <| 1 * fontMult) <|
+                        View.text blackAndWhite (round <| 1 * fontMult) <|
                             text
                 ]
 
@@ -57,9 +57,10 @@ view :
     , hasDesc : Bool
     , code : String
     , img : String
+    , blackAndWhite : Bool
     }
     -> Element msg
-view { name, cost, effects, hasDesc, code, img } =
+view { name, cost, effects, hasDesc, code, img, blackAndWhite } =
     let
         effectsAmount : Int
         effectsAmount =
@@ -94,7 +95,7 @@ view { name, cost, effects, hasDesc, code, img } =
                                     else
                                         \field -> { field | desc = "" }
                                    )
-                                |> textField
+                                |> textField blackAndWhite
                                 |> Element.el
                                     [ Font.size <| round <| 2 * fontMult
                                     , Element.padding <| round <| 2 * spacingMult
@@ -122,7 +123,7 @@ view { name, cost, effects, hasDesc, code, img } =
                     , Element.width <| Element.fill
                     ]
                 <|
-                    View.text (round <| 2 * fontMult) <|
+                    View.text blackAndWhite (round <| 2 * fontMult) <|
                         case cost of
                             ( [], 0 ) ->
                                 " "

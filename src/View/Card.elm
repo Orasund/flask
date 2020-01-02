@@ -1,12 +1,17 @@
 module View.Card exposing (view)
 
+import Data exposing (baseMult, cardHeight, cardWidth, fontMult, spacingMult)
+import Data.Effect as Effect exposing (Effect(..))
+import Data.Element as Elem
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-import Data exposing (baseMult, cardHeight, cardWidth, fontMult, spacingMult)
-import Data.Effect as Effect exposing (Effect(..))
-import Data.Element as Elem
+import Emoji
+import Html exposing (Html)
+import Html.Attributes as Attributes
+import Svg
+import View
 
 
 textField : { title : String, desc : String } -> Element msg
@@ -19,7 +24,8 @@ textField { title, desc } =
                 , Font.center
                 ]
             <|
-                Element.text title
+                View.text (round <| 2 * fontMult) <|
+                    title
 
         text ->
             Element.column
@@ -30,7 +36,8 @@ textField { title, desc } =
                 [ Element.el
                     [ Font.size <| round <| 2 * fontMult, Element.centerX ]
                   <|
-                    Element.text title
+                    View.text (round <| 2 * fontMult) <|
+                        title
                 , Element.paragraph
                     [ Element.width <| Element.fill
                     , Font.size <| round <| 1 * fontMult
@@ -38,7 +45,8 @@ textField { title, desc } =
                     ]
                   <|
                     List.singleton <|
-                        Element.text text
+                        View.text (round <| 1 * fontMult) <|
+                            text
                 ]
 
 
@@ -73,7 +81,7 @@ view { name, cost, effects, hasDesc, code, img } =
                                             && (case effect of
                                                     Plant ->
                                                         effectsAmount <= 1
-                                                    
+
                                                     Discard _ ->
                                                         effectsAmount <= 1
 
@@ -103,6 +111,8 @@ view { name, cost, effects, hasDesc, code, img } =
         , Border.solid
         , Border.color <| Element.rgb255 0 0 0
         , Element.spacing <| round <| 1 * spacingMult
+        , Element.alignTop
+        , Element.alignLeft
         ]
     <|
         List.concat
@@ -112,7 +122,7 @@ view { name, cost, effects, hasDesc, code, img } =
                     , Element.width <| Element.fill
                     ]
                 <|
-                    Element.text <|
+                    View.text (round <| 2 * fontMult) <|
                         case cost of
                             ( [], 0 ) ->
                                 " "

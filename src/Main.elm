@@ -2,17 +2,21 @@ module Main exposing (main)
 
 import Array exposing (Array)
 import Browser
+import Codec
+import Data exposing (baseMult, cardHeight, cardWidth, fontMult, spacingMult)
+import Data.Base as Base exposing (Base(..))
+import Data.Card as Card exposing (Card)
+import Data.Composition as Composition exposing (Composition)
+import Data.Effect as Effect exposing (Effect(..))
+import Data.Element as Elem
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
-import Data exposing (baseMult, cardHeight, cardWidth, fontMult, spacingMult)
-import Data.Base as Base exposing (Base(..))
-import Data.Composition as Composition exposing (Composition)
-import Data.Effect as Effect exposing (Effect(..))
-import Data.Element as Elem
-import View.Card as Card
+import File exposing (File)
+import File.Download as Download
+import File.Select as Select
 import Framework
 import Framework.Button as Button
 import Framework.Card
@@ -20,13 +24,10 @@ import Framework.Color as Color
 import Framework.Grid as Grid
 import Framework.Input as Input
 import Html exposing (Html)
-import Data.Card as Card exposing (Card)
-import File.Download as Download
-import File.Select as Select
-import File exposing (File)
-import Codec
-import Task
 import Http
+import Task
+import View.Card as Card
+
 
 type alias Model =
     { cards : Array Card
@@ -120,18 +121,21 @@ update msg model =
             )
 
         ChangedName name ->
-            ( { model 
-                | cards = model.cards 
-                    |> Array.set model.editing 
-                        { editedCard | name = name } 
+            ( { model
+                | cards =
+                    model.cards
+                        |> Array.set model.editing
+                            { editedCard | name = name }
               }
             , Cmd.none
             )
+
         ChangedImg img ->
-            ( { model 
-                | cards = model.cards 
-                    |> Array.set model.editing 
-                        { editedCard | img = img } 
+            ( { model
+                | cards =
+                    model.cards
+                        |> Array.set model.editing
+                            { editedCard | img = img }
               }
             , Cmd.none
             )
@@ -146,17 +150,17 @@ update msg model =
               }
             , Cmd.none
             )
-        
+
         AddCard ->
             ( { model
                 | editing = model.cards |> Array.length
-                , cards =  model.cards |> Array.push (Card.empty 1)
-                }
+                , cards = model.cards |> Array.push (Card.empty 1)
+              }
             , Cmd.none
             )
-        
+
         Selected index ->
-            ( { model | editing = index},Cmd.none)
+            ( { model | editing = index }, Cmd.none )
 
         Save ->
             ( model
@@ -164,36 +168,37 @@ update msg model =
                 |> Codec.encodeToString 2 (Codec.array Card.codec)
                 |> Download.string "flask_cards.json" "text/json"
             )
-        
+
         Load ->
             ( model
-            , Select.file ["text/json"] GotFile
+            , Select.file [ "text/json" ] GotFile
             )
-        
+
         GotFile file ->
             ( model
-            , file |> File.toString
+            , file
+                |> File.toString
                 |> Task.perform GotJson
             )
-        
+
         GotJson json ->
             case
                 json
                     |> Codec.decodeString (Codec.array Card.codec)
             of
                 Ok cards ->
-                    ( {model| editing = 0
+                    ( { model
+                        | editing = 0
                         , cards = cards
-                        }
-                        , Cmd.none
-                        )
+                      }
+                    , Cmd.none
+                    )
+
                 Err _ ->
-                    (model,Cmd.none)
+                    ( model, Cmd.none )
 
         GotError ->
-            ( model, Cmd.none)
-
-            
+            ( model, Cmd.none )
 
 
 init : () -> ( Model, Cmd Msg )
@@ -204,18 +209,18 @@ init _ =
       , editing = 0
       }
     , Http.get
-                { url = "https://raw.githubusercontent.com/Orasund/flask/master/deck/base.json"
-                , expect =
-                    Http.expectString
-                        (\result ->
-                            case result of
-                                Ok json ->
-                                    GotJson json
+        { url = "https://raw.githubusercontent.com/Orasund/flask/master/deck/base.json"
+        , expect =
+            Http.expectString
+                (\result ->
+                    case result of
+                        Ok json ->
+                            GotJson json
 
-                                Err error ->
-                                    GotError
-                        )
-                }
+                        Err error ->
+                            GotError
+                )
+        }
     )
 
 
@@ -264,55 +269,57 @@ view model =
                                     |> card
                                     |> List.head
                                     |> Maybe.map
-                                        ( \label ->
-                                            Input.button [Element.alignLeft] <|
-                                            {label = Element.el
-                                            (Color.info ++ [ Element.inFront <|
-                                                Element.el
-                                                    (if i == model.editing
-                                                    then
-                                                        Framework.Card.simple
-                                                        ++ Color.info
-                                                        ++ [ Border.roundEach
-                                                                { topLeft = 0
-                                                                , bottomLeft =0
-                                                                , topRight = round <| 16 * baseMult
-                                                                , bottomRight = round <| 16 * baseMult
-                                                                }
-                                                           , Element.centerY
-                                                           , Element.alignLeft
-                                                           ]
-                                                    else
-                                                        Framework.Card.simple
-                                                        ++ Color.info
-                                                        ++ [ Border.roundEach
-                                                                { topLeft = round <| 16 * baseMult
-                                                                , bottomLeft = round <| 16 * baseMult
-                                                                , topRight = 0
-                                                                , bottomRight = 0
-                                                                }
-                                                           , Element.centerY
-                                                           , Element.alignRight
-                                                           ]
-                                                    )
-                                                <|
-                                                    Element.text (String.fromInt c.amount ++ "x")
-                                            , Element.width <| Element.px <| cardWidth
-                                            , Element.height <| Element.px <| cardHeight
-                                            
-                                            ] ++ (  if i == model.editing
-                                                    then 
-                                                        [ Border.color <| Color.cyan
-                                                        , Border.width <| round <| 2 * spacingMult
-                                                        ]
-                                                    else 
-                                                        []
-                                                )
-                                            ) <| label
-                                            , onPress = Just (Selected i)
-                                            }
-                                            
-                                            
+                                        (\label ->
+                                            Input.button [ Element.alignLeft ] <|
+                                                { label =
+                                                    Element.el
+                                                        (Color.info
+                                                            ++ [ Element.inFront <|
+                                                                    Element.el
+                                                                        (if i == model.editing then
+                                                                            Framework.Card.simple
+                                                                                ++ Color.info
+                                                                                ++ [ Border.roundEach
+                                                                                        { topLeft = 0
+                                                                                        , bottomLeft = 0
+                                                                                        , topRight = round <| 16 * baseMult
+                                                                                        , bottomRight = round <| 16 * baseMult
+                                                                                        }
+                                                                                   , Element.centerY
+                                                                                   , Element.alignLeft
+                                                                                   ]
+
+                                                                         else
+                                                                            Framework.Card.simple
+                                                                                ++ Color.info
+                                                                                ++ [ Border.roundEach
+                                                                                        { topLeft = round <| 16 * baseMult
+                                                                                        , bottomLeft = round <| 16 * baseMult
+                                                                                        , topRight = 0
+                                                                                        , bottomRight = 0
+                                                                                        }
+                                                                                   , Element.centerY
+                                                                                   , Element.alignRight
+                                                                                   ]
+                                                                        )
+                                                                    <|
+                                                                        Element.text (String.fromInt c.amount ++ "x")
+                                                               , Element.width <| Element.px <| cardWidth
+                                                               , Element.height <| Element.px <| cardHeight
+                                                               ]
+                                                            ++ (if i == model.editing then
+                                                                    [ Border.color <| Color.cyan
+                                                                    , Border.width <| round <| 2 * spacingMult
+                                                                    ]
+
+                                                                else
+                                                                    []
+                                                               )
+                                                        )
+                                                    <|
+                                                        label
+                                                , onPress = Just (Selected i)
+                                                }
                                         )
                             )
                             >> List.filterMap identity
@@ -327,7 +334,7 @@ view model =
 
         displayCards : Element Msg
         displayCards =
-            Element.paragraph [ Element.width <| Element.fill ] <|
+            Element.paragraph [ Element.width <| Element.fill, Element.spacing <| 0 ] <|
                 List.concat
                     [ cards
                     , if model.showGui then
@@ -350,7 +357,8 @@ view model =
                                     }
                             , Element.centerY
                             ]
-                          <| Element.none
+                          <|
+                            Element.none
                         ]
 
                       else
@@ -387,11 +395,10 @@ view model =
                         }
                     ]
                 ]
-        
+
         toTitle : Base -> String
         toTitle =
             Base.card >> .effect >> Effect.toTextField >> .title
-
     in
     (if model.showGui then
         Framework.layout [] << Element.el Framework.container
@@ -403,7 +410,8 @@ view model =
         if model.showGui then
             Element.row (Grid.spacedEvenly ++ [ Element.width Element.fill ]) <|
                 [ Element.el
-                    [ Element.width <| Element.fill, Element.scrollbarY,Element.height <| Element.px <| 650] <|
+                    [ Element.width <| Element.fill, Element.scrollbarY, Element.height <| Element.px <| 650 ]
+                  <|
                     displayCards
                 , Element.column (Grid.simple ++ [ Element.width Element.shrink, Element.alignRight ]) <|
                     [ Element.column (Framework.Card.simple ++ Grid.simple) <|
@@ -429,33 +437,34 @@ view model =
                                         }
                                     , Element.row Grid.spacedEvenly <|
                                         [ Input.checkbox [] <|
-                                        { onChange =
-                                            \b ->
-                                                (if b then
-                                                    AddComponent
+                                            { onChange =
+                                                \b ->
+                                                    (if b then
+                                                        AddComponent
 
-                                                 else
-                                                    RemoveComponent
-                                                )
-                                                    G2
-                                        , icon = Input.defaultCheckbox
-                                        , checked = g2
-                                        , label = Input.labelLeft Input.label <| Element.text <| toTitle <| G2
-                                        }
-                                    , Input.checkbox [] <|
-                                        { onChange =
-                                            \b ->
-                                                (if b then
-                                                    AddComponent
+                                                     else
+                                                        RemoveComponent
+                                                    )
+                                                        G2
+                                            , icon = Input.defaultCheckbox
+                                            , checked = g2
+                                            , label = Input.labelLeft Input.label <| Element.text <| toTitle <| G2
+                                            }
+                                        , Input.checkbox [] <|
+                                            { onChange =
+                                                \b ->
+                                                    (if b then
+                                                        AddComponent
 
-                                                 else
-                                                    RemoveComponent
-                                                )
-                                                    Y2
-                                        , icon = Input.defaultCheckbox
-                                        , checked = y2
-                                        , label = Input.labelLeft Input.label <| Element.text <| toTitle <| Y2
-                                        }]
+                                                     else
+                                                        RemoveComponent
+                                                    )
+                                                        Y2
+                                            , icon = Input.defaultCheckbox
+                                            , checked = y2
+                                            , label = Input.labelLeft Input.label <| Element.text <| toTitle <| Y2
+                                            }
+                                        ]
                                     , numberInput
                                         { onIncrease = AddComponent B2
                                         , onDecrease = RemoveComponent B2
@@ -500,19 +509,20 @@ view model =
                                )
                         )
                     , Element.row Grid.simple
-                    [Input.button (Button.simple ++ Color.primary) <|
-                        { onPress = Just ToggledShowGui
-                        , label = Element.text <| "Print"
-                        }
-                    , Input.button (Button.simple ++ Color.primary) <|
-                        { onPress = Just Load
-                        , label = Element.text <| "Load"
-                        }
-                    , Input.button (Button.simple ++ Color.primary) <|
-                        { onPress = Just Save
-                        , label = Element.text <| "Save"
-                        }
-                    ]]
+                        [ Input.button (Button.simple ++ Color.primary) <|
+                            { onPress = Just ToggledShowGui
+                            , label = Element.text <| "Print"
+                            }
+                        , Input.button (Button.simple ++ Color.primary) <|
+                            { onPress = Just Load
+                            , label = Element.text <| "Load"
+                            }
+                        , Input.button (Button.simple ++ Color.primary) <|
+                            { onPress = Just Save
+                            , label = Element.text <| "Save"
+                            }
+                        ]
+                    ]
                 ]
 
         else

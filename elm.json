@@ -13,8 +13,10 @@
             "elm/html": "1.0.0",
             "elm/http": "2.0.0",
             "elm/json": "1.1.3",
+            "elm/svg": "1.0.1",
             "mdgriffith/elm-ui": "1.1.5",
-            "miniBill/elm-codec": "1.2.0"
+            "miniBill/elm-codec": "1.2.0",
+            "stephenreddek/elm-emoji": "1.0.0"
         },
         "indirect": {
             "elm/bytes": "1.0.8",

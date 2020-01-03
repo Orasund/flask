@@ -9,6 +9,7 @@ import Data.Card as Card exposing (Card)
 import Data.Composition as Composition exposing (Composition)
 import Data.Effect as Effect exposing (Effect(..))
 import Data.Element as Elem
+import Data.FormField as FormField exposing (FormField)
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
@@ -27,11 +28,8 @@ import Html exposing (Html)
 import Http
 import Task
 import View.Card as Card
-
-
-type alias ConfigForm =
-    { cardsPerPage : String
-    }
+import View.RangeInput as RangeInput
+import View.ToggleInput as ToggleInput
 
 
 type ConfigField
@@ -40,14 +38,13 @@ type ConfigField
 
 
 type alias Config =
-    { cardsPerPage : Int
+    { cardsPerPage : FormField Int ()
     , blackAndWhite : Bool
     }
 
 
 type alias Model =
     { config : Config
-    , configForm : ConfigForm
     , cards : Array Card
     , showGui : Bool
     , showConfig : Bool
@@ -59,10 +56,8 @@ type Msg
     = ToggledShowGui
     | ToggledShowConfig Bool
     | ChangedConfigField ConfigField
-    | AddComponent Base
-    | RemoveComponent Base
-    | IncreaseAmount
-    | DecreaseAmount
+    | ChangeComponent Base Int
+    | ChangeAmount Int
     | ChangedName String
     | ChangedImg String
     | DeletedSelected
@@ -93,10 +88,6 @@ update msg model =
 
         ChangedConfigField configField ->
             let
-                configForm : ConfigForm
-                configForm =
-                    model.configForm
-
                 config : Config
                 config =
                     model.config
@@ -104,8 +95,13 @@ update msg model =
             ( case configField of
                 CardsPerPage string ->
                     { model
-                        | configForm = { configForm | cardsPerPage = string }
-                        , config = { config | cardsPerPage = String.toInt string |> Maybe.withDefault config.cardsPerPage }
+                        | config =
+                            { config
+                                | cardsPerPage =
+                                    config.cardsPerPage
+                                        |> FormField.update (String.toInt >> Result.fromMaybe [ () ])
+                                            string
+                            }
                     }
 
                 BlackAndWhite bool ->
@@ -113,31 +109,19 @@ update msg model =
             , Cmd.none
             )
 
-        IncreaseAmount ->
+        ChangeAmount int ->
             ( { model
                 | cards =
                     model.cards
                         |> Array.set model.editing
                             { editedCard
-                                | amount = min 3 <| editedCard.amount + 1
+                                | amount = int
                             }
               }
             , Cmd.none
             )
 
-        DecreaseAmount ->
-            ( { model
-                | cards =
-                    model.cards
-                        |> Array.set model.editing
-                            { editedCard
-                                | amount = max 1 <| editedCard.amount - 1
-                            }
-              }
-            , Cmd.none
-            )
-
-        AddComponent base ->
+        ChangeComponent base int ->
             ( { model
                 | cards =
                     model.cards
@@ -145,21 +129,7 @@ update msg model =
                             { editedCard
                                 | composition =
                                     editedCard.composition
-                                        |> Composition.insert base
-                            }
-              }
-            , Cmd.none
-            )
-
-        RemoveComponent base ->
-            ( { model
-                | cards =
-                    model.cards
-                        |> Array.set model.editing
-                            { editedCard
-                                | composition =
-                                    editedCard.composition
-                                        |> Composition.remove base
+                                        |> Composition.update base int
                             }
               }
             , Cmd.none
@@ -259,11 +229,12 @@ init _ =
     in
     ( { cards = Array.empty
       , config =
-            { cardsPerPage = cardsPerPage
+            { cardsPerPage =
+                FormField.create
+                    { default = cardsPerPage
+                    , value = cardsPerPage |> String.fromInt
+                    }
             , blackAndWhite = blackAndWhite
-            }
-      , configForm =
-            { cardsPerPage = cardsPerPage |> String.fromInt
             }
       , showGui = True
       , showConfig = False
@@ -390,9 +361,14 @@ view model =
                         List.map (card model.config.blackAndWhite) >> List.concat
                    )
 
+        cardsPerPage : Int
+        cardsPerPage =
+            model.config.cardsPerPage
+                |> FormField.toValue
+
         emptyCards : Int
         emptyCards =
-            model.config.cardsPerPage - (cards |> List.length) |> modBy model.config.cardsPerPage
+            cardsPerPage - (cards |> List.length) |> modBy cardsPerPage
 
         displayCards : Element Msg
         displayCards =
@@ -433,30 +409,6 @@ view model =
                 |> Array.get model.editing
                 |> Maybe.withDefault (Card.empty 1)
 
-        numberInput : { onIncrease : msg, onDecrease : msg, value : Int, label : String } -> Element msg
-        numberInput { onDecrease, onIncrease, value, label } =
-            Element.row [ Element.spacing 5, Element.width <| Element.fill ] <|
-                [ Element.el Input.label <| Element.text label
-                , Element.row ([ Element.width <| Element.fill ] ++ Grid.simple)
-                    [ Element.el [ Font.center, Element.width <| Element.fillPortion 2 ] <|
-                        Element.text <|
-                            String.fromInt <|
-                                value
-                    , Element.row Grid.compact <|
-                        [ Input.button
-                            (Button.groupLeft ++ [ Element.width <| Element.fill, Element.alignLeft ])
-                            { onPress = Just <| onDecrease
-                            , label = Element.text <| "-"
-                            }
-                        , Input.button
-                            (Button.groupRight ++ Color.primary ++ [ Element.width <| Element.fill, Element.alignRight ])
-                            { onPress = Just <| onIncrease
-                            , label = Element.text <| "+"
-                            }
-                        ]
-                    ]
-                ]
-
         toTitle : Base -> String
         toTitle =
             Base.card >> .effect >> Effect.toTextField >> .title
@@ -469,12 +421,8 @@ view model =
     )
     <|
         if model.showGui then
-            Element.row (Grid.spacedEvenly ++ [ Element.width Element.fill ]) <|
-                [ Element.el
-                    [ Element.width <| Element.fill, Element.scrollbarY, Element.height <| Element.px <| 650 ]
-                  <|
-                    displayCards
-                , Element.column (Grid.simple ++ [ Element.width Element.shrink, Element.alignRight ]) <|
+            Element.paragraph (Grid.spacedEvenly ++ [ Element.width Element.fill ]) <|
+                [ Element.column (Grid.simple ++ [ Element.width Element.shrink, Element.alignRight ]) <|
                     [ Element.column Grid.compact <|
                         [ Element.row Grid.spaceEvenly <|
                             [ Input.button
@@ -504,112 +452,95 @@ view model =
                             ]
                         , Element.column (Framework.Card.simple ++ Grid.simple ++ [ Border.rounded 0 ]) <|
                             if model.showConfig then
-                                [ Input.text Input.simple
-                                    { onChange = ChangedConfigField << CardsPerPage
-                                    , text = model.configForm.cardsPerPage
-                                    , placeholder = Nothing
-                                    , label = Input.labelLeft Input.label <| Element.text "Cards Per Page"
-                                    }
-                                , Input.checkbox [] <|
+                                [ Element.row Grid.spaceEvenly <|
+                                    [ Element.el [ Element.width <| Element.fill ] <| Element.text <| "Cards Per Page"
+                                    , Input.text
+                                        ((if model.config.cardsPerPage |> FormField.unWrap |> .errors |> List.isEmpty then
+                                            []
+
+                                          else
+                                            Color.danger
+                                         )
+                                            ++ Input.simple
+                                        )
+                                        { onChange = ChangedConfigField << CardsPerPage
+                                        , text = model.config.cardsPerPage |> FormField.unWrap |> .raw
+                                        , placeholder = Nothing
+                                        , label = Input.labelHidden "Cards Per Page"
+                                        }
+                                    ]
+                                , ToggleInput.view
                                     { onChange = ChangedConfigField << BlackAndWhite
-                                    , icon = Input.defaultCheckbox
-                                    , checked = model.config.blackAndWhite
-                                    , label = Input.labelLeft Input.label <| Element.text <| "Black and White Mode"
+                                    , value = model.config.blackAndWhite
+                                    , label = "Black and White Mode"
                                     }
                                 ]
 
                             else
                                 editedCard.composition
                                     |> (\{ g1, g2, r1, r2, b1, b2, y1, y2 } ->
-                                            [ Input.text Input.simple
-                                                { onChange = ChangedName
-                                                , text = editedCard.name
-                                                , placeholder = Nothing
-                                                , label = Input.labelLeft Input.label <| Element.text "Name"
-                                                }
-                                            , Input.text Input.simple
-                                                { onChange = ChangedImg
-                                                , text = editedCard.img
-                                                , placeholder = Nothing
-                                                , label = Input.labelLeft Input.label <| Element.text "Image Link"
-                                                }
-                                            , numberInput
-                                                { onIncrease = IncreaseAmount
-                                                , onDecrease = DecreaseAmount
-                                                , value = editedCard.amount
-                                                , label = "Amount"
-                                                }
-                                            , Element.row Grid.spacedEvenly <|
-                                                [ Input.checkbox [] <|
-                                                    { onChange =
-                                                        \b ->
-                                                            (if b then
-                                                                AddComponent
+                                            List.concat
+                                                [ [ Input.text Input.simple
+                                                        { onChange = ChangedName
+                                                        , text = editedCard.name
+                                                        , placeholder = Nothing
+                                                        , label = Input.labelLeft Input.label <| Element.text "Name"
+                                                        }
+                                                  , Input.text Input.simple
+                                                        { onChange = ChangedImg
+                                                        , text = editedCard.img
+                                                        , placeholder = Nothing
+                                                        , label = Input.labelLeft Input.label <| Element.text "Image Link"
+                                                        }
+                                                  , RangeInput.view
+                                                        { minValue = 1
+                                                        , maxValue = 3
+                                                        , onChange = ChangeAmount
+                                                        , value = editedCard.amount
+                                                        , label = "Amount"
+                                                        }
+                                                  , Element.row Grid.simple <|
+                                                        [ ToggleInput.view
+                                                            { onChange =
+                                                                \b ->
+                                                                    if b then
+                                                                        ChangeComponent G2 1
 
-                                                             else
-                                                                RemoveComponent
-                                                            )
-                                                                G2
-                                                    , icon = Input.defaultCheckbox
-                                                    , checked = g2
-                                                    , label = Input.labelLeft Input.label <| Element.text <| toTitle <| G2
-                                                    }
-                                                , Input.checkbox [] <|
-                                                    { onChange =
-                                                        \b ->
-                                                            (if b then
-                                                                AddComponent
+                                                                    else
+                                                                        ChangeComponent G2 0
+                                                            , value = g2
+                                                            , label = toTitle <| G2
+                                                            }
+                                                        , ToggleInput.view
+                                                            { onChange =
+                                                                \b ->
+                                                                    if b then
+                                                                        ChangeComponent Y2 1
 
-                                                             else
-                                                                RemoveComponent
-                                                            )
-                                                                Y2
-                                                    , icon = Input.defaultCheckbox
-                                                    , checked = y2
-                                                    , label = Input.labelLeft Input.label <| Element.text <| toTitle <| Y2
-                                                    }
+                                                                    else
+                                                                        ChangeComponent Y2 0
+                                                            , value = y2
+                                                            , label = toTitle <| Y2
+                                                            }
+                                                        ]
+                                                  ]
+                                                , [ ( b2, B2 ), ( b1, B1 ), ( y1, Y1 ), ( g1, G1 ), ( r1, R1 ), ( r2, R2 ) ]
+                                                    |> List.map
+                                                        (\( value, base ) ->
+                                                            RangeInput.view
+                                                                { minValue = 0
+                                                                , maxValue = 3
+                                                                , onChange = ChangeComponent base
+                                                                , value = value
+                                                                , label = base |> toTitle
+                                                                }
+                                                        )
+                                                , [ Input.button (Button.simple ++ Color.danger ++ [ Element.alignRight ]) <|
+                                                        { onPress = Just DeletedSelected
+                                                        , label = Element.text <| "Remove"
+                                                        }
+                                                  ]
                                                 ]
-                                            , numberInput
-                                                { onIncrease = AddComponent B2
-                                                , onDecrease = RemoveComponent B2
-                                                , value = b2
-                                                , label = B2 |> toTitle
-                                                }
-                                            , numberInput
-                                                { onIncrease = AddComponent B1
-                                                , onDecrease = RemoveComponent B1
-                                                , value = b1
-                                                , label = B1 |> toTitle
-                                                }
-                                            , numberInput
-                                                { onIncrease = AddComponent Y1
-                                                , onDecrease = RemoveComponent Y1
-                                                , value = y1
-                                                , label = Y1 |> toTitle
-                                                }
-                                            , numberInput
-                                                { onIncrease = AddComponent G1
-                                                , onDecrease = RemoveComponent G1
-                                                , value = g1
-                                                , label = G1 |> toTitle
-                                                }
-                                            , numberInput
-                                                { onIncrease = AddComponent R1
-                                                , onDecrease = RemoveComponent R1
-                                                , value = r1
-                                                , label = R1 |> toTitle
-                                                }
-                                            , numberInput
-                                                { onIncrease = AddComponent R2
-                                                , onDecrease = RemoveComponent R2
-                                                , value = r2
-                                                , label = R2 |> toTitle
-                                                }
-                                            , Input.button (Button.simple ++ Color.danger ++ [ Element.alignRight ]) <|
-                                                { onPress = Just DeletedSelected
-                                                , label = Element.text <| "Remove"
-                                                }
-                                            ]
                                        )
                         ]
                     , Element.row Grid.simple
@@ -627,6 +558,10 @@ view model =
                             }
                         ]
                     ]
+                , Element.el
+                    [ Element.width <| Element.fill, Element.scrollbarY, Element.height <| Element.px <| 650 ]
+                  <|
+                    displayCards
                 ]
 
         else

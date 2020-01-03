@@ -1,7 +1,8 @@
-module Data.Composition exposing (Composition, codec, empty, fromList, insert, remove, toList, toString)
+module Data.Composition exposing (Composition, codec, empty, fromList, toList, toString, update)
 
-import Data.Base as Base exposing (Base(..))
 import Codec exposing (Codec)
+import Data.Base as Base exposing (Base(..))
+
 
 type alias Composition =
     { y1 : Int
@@ -26,6 +27,34 @@ empty =
     , b1 = 0
     , b2 = 0
     }
+
+
+update : Base -> Int -> Composition -> Composition
+update base int out =
+    case base of
+        Y1 ->
+            { out | y1 = clamp 0 3 <| int }
+
+        Y2 ->
+            { out | y2 = int > 0 }
+
+        R1 ->
+            { out | r1 = clamp 0 3 <| int }
+
+        R2 ->
+            { out | r2 = clamp 0 3 <| int }
+
+        G1 ->
+            { out | g1 = clamp 0 3 <| int }
+
+        G2 ->
+            { out | g2 = int > 0 }
+
+        B1 ->
+            { out | b1 = clamp 0 3 <| int }
+
+        B2 ->
+            { out | b2 = clamp 0 3 <| int }
 
 
 insert : Base -> Composition -> Composition
@@ -118,15 +147,16 @@ toString =
         >> List.intersperse " - "
         >> String.concat
 
+
 codec : Codec Composition
-codec = 
+codec =
     Codec.object Composition
-    |> Codec.field "y1" .y1 Codec.int
-    |> Codec.field "y2" .y2 Codec.bool
-    |> Codec.field "r1" .r1 Codec.int
-    |> Codec.field "r2" .r2 Codec.int
-    |> Codec.field "g1" .g1 Codec.int
-    |> Codec.field "g2" .g2 Codec.bool
-    |> Codec.field "b1" .b1 Codec.int
-    |> Codec.field "b2" .b2 Codec.int
-    |> Codec.buildObject
+        |> Codec.field "y1" .y1 Codec.int
+        |> Codec.field "y2" .y2 Codec.bool
+        |> Codec.field "r1" .r1 Codec.int
+        |> Codec.field "r2" .r2 Codec.int
+        |> Codec.field "g1" .g1 Codec.int
+        |> Codec.field "g2" .g2 Codec.bool
+        |> Codec.field "b1" .b1 Codec.int
+        |> Codec.field "b2" .b2 Codec.int
+        |> Codec.buildObject

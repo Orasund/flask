@@ -5556,6 +5556,15 @@ var $author$project$Main$GotError = {$: 'GotError'};
 var $author$project$Main$GotJson = function (a) {
 	return {$: 'GotJson', a: a};
 };
+var $author$project$Data$FormField$FormField = function (a) {
+	return {$: 'FormField', a: a};
+};
+var $author$project$Data$FormField$create = function (_v0) {
+	var _default = _v0._default;
+	var value = _v0.value;
+	return $author$project$Data$FormField$FormField(
+		{errors: _List_Nil, raw: value, value: _default});
+};
 var $elm$http$Http$BadStatus_ = F2(
 	function (a, b) {
 		return {$: 'BadStatus_', a: a, b: b};
@@ -6341,9 +6350,13 @@ var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
 			cards: $elm$core$Array$empty,
-			config: {blackAndWhite: blackAndWhite, cardsPerPage: cardsPerPage},
-			configForm: {
-				cardsPerPage: $elm$core$String$fromInt(cardsPerPage)
+			config: {
+				blackAndWhite: blackAndWhite,
+				cardsPerPage: $author$project$Data$FormField$create(
+					{
+						_default: cardsPerPage,
+						value: $elm$core$String$fromInt(cardsPerPage)
+					})
 			},
 			editing: 0,
 			showConfig: false,
@@ -6811,6 +6824,15 @@ var $elm$file$File$Select$file = F2(
 			toMsg,
 			_File_uploadOne(mimes));
 	});
+var $elm$core$Result$fromMaybe = F2(
+	function (err, maybe) {
+		if (maybe.$ === 'Just') {
+			var v = maybe.a;
+			return $elm$core$Result$Ok(v);
+		} else {
+			return $elm$core$Result$Err(err);
+		}
+	});
 var $elm$core$Array$getHelp = F3(
 	function (shift, index, tree) {
 		getHelp:
@@ -6847,59 +6869,6 @@ var $elm$core$Array$get = F2(
 			A2($elm$core$Elm$JsArray$unsafeGet, $elm$core$Array$bitMask & index, tail)) : $elm$core$Maybe$Just(
 			A3($elm$core$Array$getHelp, startShift, index, tree)));
 	});
-var $elm$core$Basics$min = F2(
-	function (x, y) {
-		return (_Utils_cmp(x, y) < 0) ? x : y;
-	});
-var $author$project$Data$Composition$insert = F2(
-	function (base, out) {
-		switch (base.$) {
-			case 'Y1':
-				return _Utils_update(
-					out,
-					{
-						y1: A2($elm$core$Basics$min, 3, out.y1 + 1)
-					});
-			case 'Y2':
-				return _Utils_update(
-					out,
-					{y2: true});
-			case 'R1':
-				return _Utils_update(
-					out,
-					{
-						r1: A2($elm$core$Basics$min, 3, out.r1 + 1)
-					});
-			case 'R2':
-				return _Utils_update(
-					out,
-					{
-						r2: A2($elm$core$Basics$min, 3, out.r2 + 1)
-					});
-			case 'G1':
-				return _Utils_update(
-					out,
-					{
-						g1: A2($elm$core$Basics$min, 3, out.g1 + 1)
-					});
-			case 'G2':
-				return _Utils_update(
-					out,
-					{g2: true});
-			case 'B1':
-				return _Utils_update(
-					out,
-					{
-						b1: A2($elm$core$Basics$min, 3, out.b1 + 1)
-					});
-			default:
-				return _Utils_update(
-					out,
-					{
-						b2: A2($elm$core$Basics$min, 3, out.b2 + 1)
-					});
-		}
-	});
 var $elm$core$Array$length = function (_v0) {
 	var len = _v0.a;
 	return len;
@@ -6914,55 +6883,6 @@ var $elm$core$Array$push = F2(
 			$elm$core$Array$unsafeReplaceTail,
 			A2($elm$core$Elm$JsArray$push, a, tail),
 			array);
-	});
-var $author$project$Data$Composition$remove = F2(
-	function (base, out) {
-		switch (base.$) {
-			case 'Y1':
-				return _Utils_update(
-					out,
-					{
-						y1: A2($elm$core$Basics$max, 0, out.y1 - 1)
-					});
-			case 'Y2':
-				return _Utils_update(
-					out,
-					{y2: false});
-			case 'R1':
-				return _Utils_update(
-					out,
-					{
-						r1: A2($elm$core$Basics$max, 0, out.r1 - 1)
-					});
-			case 'R2':
-				return _Utils_update(
-					out,
-					{
-						r2: A2($elm$core$Basics$max, 0, out.r2 - 1)
-					});
-			case 'G1':
-				return _Utils_update(
-					out,
-					{
-						g1: A2($elm$core$Basics$max, 0, out.g1 - 1)
-					});
-			case 'G2':
-				return _Utils_update(
-					out,
-					{g2: false});
-			case 'B1':
-				return _Utils_update(
-					out,
-					{
-						b1: A2($elm$core$Basics$max, 0, out.b1 - 1)
-					});
-			default:
-				return _Utils_update(
-					out,
-					{
-						b2: A2($elm$core$Basics$max, 0, out.b2 - 1)
-					});
-		}
 	});
 var $elm$core$Array$setHelp = F4(
 	function (shift, index, value, tree) {
@@ -7214,6 +7134,75 @@ var $elm$file$File$Download$string = F3(
 			A3(_File_download, name, mime, content));
 	});
 var $elm$file$File$toString = _File_toString;
+var $elm$core$Basics$clamp = F3(
+	function (low, high, number) {
+		return (_Utils_cmp(number, low) < 0) ? low : ((_Utils_cmp(number, high) > 0) ? high : number);
+	});
+var $author$project$Data$Composition$update = F3(
+	function (base, _int, out) {
+		switch (base.$) {
+			case 'Y1':
+				return _Utils_update(
+					out,
+					{
+						y1: A3($elm$core$Basics$clamp, 0, 3, _int)
+					});
+			case 'Y2':
+				return _Utils_update(
+					out,
+					{y2: _int > 0});
+			case 'R1':
+				return _Utils_update(
+					out,
+					{
+						r1: A3($elm$core$Basics$clamp, 0, 3, _int)
+					});
+			case 'R2':
+				return _Utils_update(
+					out,
+					{
+						r2: A3($elm$core$Basics$clamp, 0, 3, _int)
+					});
+			case 'G1':
+				return _Utils_update(
+					out,
+					{
+						g1: A3($elm$core$Basics$clamp, 0, 3, _int)
+					});
+			case 'G2':
+				return _Utils_update(
+					out,
+					{g2: _int > 0});
+			case 'B1':
+				return _Utils_update(
+					out,
+					{
+						b1: A3($elm$core$Basics$clamp, 0, 3, _int)
+					});
+			default:
+				return _Utils_update(
+					out,
+					{
+						b2: A3($elm$core$Basics$clamp, 0, 3, _int)
+					});
+		}
+	});
+var $author$project$Data$FormField$update = F3(
+	function (fun, string, _v0) {
+		var formField = _v0.a;
+		var _v1 = fun(string);
+		if (_v1.$ === 'Ok') {
+			var a = _v1.a;
+			return $author$project$Data$FormField$FormField(
+				{errors: _List_Nil, raw: string, value: a});
+		} else {
+			var err = _v1.a;
+			return $author$project$Data$FormField$FormField(
+				_Utils_update(
+					formField,
+					{errors: err, raw: string}));
+		}
+	});
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (maybe.$ === 'Just') {
@@ -7245,7 +7234,6 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 'ChangedConfigField':
 				var configField = msg.a;
-				var configForm = model.configForm;
 				var config = model.config;
 				return _Utils_Tuple2(
 					function () {
@@ -7257,14 +7245,17 @@ var $author$project$Main$update = F2(
 									config: _Utils_update(
 										config,
 										{
-											cardsPerPage: A2(
-												$elm$core$Maybe$withDefault,
-												config.cardsPerPage,
-												$elm$core$String$toInt(string))
-										}),
-									configForm: _Utils_update(
-										configForm,
-										{cardsPerPage: string})
+											cardsPerPage: A3(
+												$author$project$Data$FormField$update,
+												A2(
+													$elm$core$Basics$composeR,
+													$elm$core$String$toInt,
+													$elm$core$Result$fromMaybe(
+														_List_fromArray(
+															[_Utils_Tuple0]))),
+												string,
+												config.cardsPerPage)
+										})
 								});
 						} else {
 							var bool = configField.a;
@@ -7278,7 +7269,8 @@ var $author$project$Main$update = F2(
 						}
 					}(),
 					$elm$core$Platform$Cmd$none);
-			case 'IncreaseAmount':
+			case 'ChangeAmount':
+				var _int = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -7288,30 +7280,13 @@ var $author$project$Main$update = F2(
 								model.editing,
 								_Utils_update(
 									editedCard,
-									{
-										amount: A2($elm$core$Basics$min, 3, editedCard.amount + 1)
-									}),
+									{amount: _int}),
 								model.cards)
 						}),
 					$elm$core$Platform$Cmd$none);
-			case 'DecreaseAmount':
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							cards: A3(
-								$elm$core$Array$set,
-								model.editing,
-								_Utils_update(
-									editedCard,
-									{
-										amount: A2($elm$core$Basics$max, 1, editedCard.amount - 1)
-									}),
-								model.cards)
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'AddComponent':
+			case 'ChangeComponent':
 				var base = msg.a;
+				var _int = msg.b;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -7322,24 +7297,7 @@ var $author$project$Main$update = F2(
 								_Utils_update(
 									editedCard,
 									{
-										composition: A2($author$project$Data$Composition$insert, base, editedCard.composition)
-									}),
-								model.cards)
-						}),
-					$elm$core$Platform$Cmd$none);
-			case 'RemoveComponent':
-				var base = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							cards: A3(
-								$elm$core$Array$set,
-								model.editing,
-								_Utils_update(
-									editedCard,
-									{
-										composition: A2($author$project$Data$Composition$remove, base, editedCard.composition)
+										composition: A3($author$project$Data$Composition$update, base, _int, editedCard.composition)
 									}),
 								model.cards)
 						}),
@@ -7458,9 +7416,6 @@ var $author$project$Main$update = F2(
 		}
 	});
 var $author$project$Main$AddCard = {$: 'AddCard'};
-var $author$project$Main$AddComponent = function (a) {
-	return {$: 'AddComponent', a: a};
-};
 var $author$project$Data$Base$B1 = {$: 'B1'};
 var $author$project$Data$Base$B2 = {$: 'B2'};
 var $author$project$Main$BlackAndWhite = function (a) {
@@ -7469,6 +7424,13 @@ var $author$project$Main$BlackAndWhite = function (a) {
 var $author$project$Main$CardsPerPage = function (a) {
 	return {$: 'CardsPerPage', a: a};
 };
+var $author$project$Main$ChangeAmount = function (a) {
+	return {$: 'ChangeAmount', a: a};
+};
+var $author$project$Main$ChangeComponent = F2(
+	function (a, b) {
+		return {$: 'ChangeComponent', a: a, b: b};
+	});
 var $author$project$Main$ChangedConfigField = function (a) {
 	return {$: 'ChangedConfigField', a: a};
 };
@@ -7478,17 +7440,12 @@ var $author$project$Main$ChangedImg = function (a) {
 var $author$project$Main$ChangedName = function (a) {
 	return {$: 'ChangedName', a: a};
 };
-var $author$project$Main$DecreaseAmount = {$: 'DecreaseAmount'};
 var $author$project$Main$DeletedSelected = {$: 'DeletedSelected'};
 var $author$project$Data$Base$G1 = {$: 'G1'};
 var $author$project$Data$Base$G2 = {$: 'G2'};
-var $author$project$Main$IncreaseAmount = {$: 'IncreaseAmount'};
 var $author$project$Main$Load = {$: 'Load'};
 var $author$project$Data$Base$R1 = {$: 'R1'};
 var $author$project$Data$Base$R2 = {$: 'R2'};
-var $author$project$Main$RemoveComponent = function (a) {
-	return {$: 'RemoveComponent', a: a};
-};
 var $author$project$Main$Save = {$: 'Save'};
 var $author$project$Main$Selected = function (a) {
 	return {$: 'Selected', a: a};
@@ -10093,6 +10050,10 @@ var $mdgriffith$elm_ui$Internal$Model$hasSmallCaps = function (typeface) {
 		return false;
 	}
 };
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
+	});
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
@@ -21465,165 +21426,6 @@ var $author$project$Main$card = F2(
 	});
 var $mdgriffith$elm_ui$Internal$Model$CenterY = {$: 'CenterY'};
 var $mdgriffith$elm_ui$Element$centerY = $mdgriffith$elm_ui$Internal$Model$AlignY($mdgriffith$elm_ui$Internal$Model$CenterY);
-var $mdgriffith$elm_ui$Internal$Model$LivePolite = {$: 'LivePolite'};
-var $mdgriffith$elm_ui$Element$Region$announce = $mdgriffith$elm_ui$Internal$Model$Describe($mdgriffith$elm_ui$Internal$Model$LivePolite);
-var $mdgriffith$elm_ui$Element$Input$applyLabel = F3(
-	function (attrs, label, input) {
-		if (label.$ === 'HiddenLabel') {
-			var labelText = label.a;
-			return A4(
-				$mdgriffith$elm_ui$Internal$Model$element,
-				$mdgriffith$elm_ui$Internal$Model$asColumn,
-				$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
-				attrs,
-				$mdgriffith$elm_ui$Internal$Model$Unkeyed(
-					_List_fromArray(
-						[input])));
-		} else {
-			var position = label.a;
-			var labelAttrs = label.b;
-			var labelChild = label.c;
-			var labelElement = A4(
-				$mdgriffith$elm_ui$Internal$Model$element,
-				$mdgriffith$elm_ui$Internal$Model$asEl,
-				$mdgriffith$elm_ui$Internal$Model$div,
-				labelAttrs,
-				$mdgriffith$elm_ui$Internal$Model$Unkeyed(
-					_List_fromArray(
-						[labelChild])));
-			switch (position.$) {
-				case 'Above':
-					return A4(
-						$mdgriffith$elm_ui$Internal$Model$element,
-						$mdgriffith$elm_ui$Internal$Model$asColumn,
-						$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
-						attrs,
-						$mdgriffith$elm_ui$Internal$Model$Unkeyed(
-							_List_fromArray(
-								[labelElement, input])));
-				case 'Below':
-					return A4(
-						$mdgriffith$elm_ui$Internal$Model$element,
-						$mdgriffith$elm_ui$Internal$Model$asColumn,
-						$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
-						attrs,
-						$mdgriffith$elm_ui$Internal$Model$Unkeyed(
-							_List_fromArray(
-								[input, labelElement])));
-				case 'OnRight':
-					return A4(
-						$mdgriffith$elm_ui$Internal$Model$element,
-						$mdgriffith$elm_ui$Internal$Model$asRow,
-						$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
-						attrs,
-						$mdgriffith$elm_ui$Internal$Model$Unkeyed(
-							_List_fromArray(
-								[input, labelElement])));
-				default:
-					return A4(
-						$mdgriffith$elm_ui$Internal$Model$element,
-						$mdgriffith$elm_ui$Internal$Model$asRow,
-						$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
-						attrs,
-						$mdgriffith$elm_ui$Internal$Model$Unkeyed(
-							_List_fromArray(
-								[labelElement, input])));
-			}
-		}
-	});
-var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
-var $mdgriffith$elm_ui$Internal$Model$Label = function (a) {
-	return {$: 'Label', a: a};
-};
-var $mdgriffith$elm_ui$Element$Input$hiddenLabelAttribute = function (label) {
-	if (label.$ === 'HiddenLabel') {
-		var textLabel = label.a;
-		return $mdgriffith$elm_ui$Internal$Model$Describe(
-			$mdgriffith$elm_ui$Internal$Model$Label(textLabel));
-	} else {
-		return $mdgriffith$elm_ui$Internal$Model$NoAttribute;
-	}
-};
-var $mdgriffith$elm_ui$Element$Input$isHiddenLabel = function (label) {
-	if (label.$ === 'HiddenLabel') {
-		return true;
-	} else {
-		return false;
-	}
-};
-var $mdgriffith$elm_ui$Element$Input$onKeyLookup = function (lookup) {
-	var decode = function (code) {
-		var _v0 = lookup(code);
-		if (_v0.$ === 'Nothing') {
-			return $elm$json$Json$Decode$fail('No key matched');
-		} else {
-			var msg = _v0.a;
-			return $elm$json$Json$Decode$succeed(msg);
-		}
-	};
-	var isKey = A2(
-		$elm$json$Json$Decode$andThen,
-		decode,
-		A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string));
-	return $mdgriffith$elm_ui$Internal$Model$Attr(
-		A2($elm$html$Html$Events$on, 'keyup', isKey));
-};
-var $mdgriffith$elm_ui$Element$Input$space = ' ';
-var $mdgriffith$elm_ui$Element$Input$tabindex = A2($elm$core$Basics$composeL, $mdgriffith$elm_ui$Internal$Model$Attr, $elm$html$Html$Attributes$tabindex);
-var $mdgriffith$elm_ui$Element$Input$checkbox = F2(
-	function (attrs, _v0) {
-		var label = _v0.label;
-		var icon = _v0.icon;
-		var checked = _v0.checked;
-		var onChange = _v0.onChange;
-		var attributes = _Utils_ap(
-			_List_fromArray(
-				[
-					$mdgriffith$elm_ui$Element$Input$isHiddenLabel(label) ? $mdgriffith$elm_ui$Internal$Model$NoAttribute : $mdgriffith$elm_ui$Element$spacing(6),
-					$mdgriffith$elm_ui$Internal$Model$Attr(
-					$elm$html$Html$Events$onClick(
-						onChange(!checked))),
-					$mdgriffith$elm_ui$Element$Region$announce,
-					$mdgriffith$elm_ui$Element$Input$onKeyLookup(
-					function (code) {
-						return _Utils_eq(code, $mdgriffith$elm_ui$Element$Input$enter) ? $elm$core$Maybe$Just(
-							onChange(!checked)) : (_Utils_eq(code, $mdgriffith$elm_ui$Element$Input$space) ? $elm$core$Maybe$Just(
-							onChange(!checked)) : $elm$core$Maybe$Nothing);
-					}),
-					$mdgriffith$elm_ui$Element$Input$tabindex(0),
-					$mdgriffith$elm_ui$Element$pointer,
-					$mdgriffith$elm_ui$Element$alignLeft,
-					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
-				]),
-			attrs);
-		return A3(
-			$mdgriffith$elm_ui$Element$Input$applyLabel,
-			attributes,
-			label,
-			A4(
-				$mdgriffith$elm_ui$Internal$Model$element,
-				$mdgriffith$elm_ui$Internal$Model$asEl,
-				$mdgriffith$elm_ui$Internal$Model$div,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Internal$Model$Attr(
-						A2($elm$html$Html$Attributes$attribute, 'role', 'checkbox')),
-						$mdgriffith$elm_ui$Internal$Model$Attr(
-						A2(
-							$elm$html$Html$Attributes$attribute,
-							'aria-checked',
-							checked ? 'true' : 'false')),
-						$mdgriffith$elm_ui$Element$Input$hiddenLabelAttribute(label),
-						$mdgriffith$elm_ui$Element$centerY,
-						$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$fill),
-						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$shrink)
-					]),
-				$mdgriffith$elm_ui$Internal$Model$Unkeyed(
-					_List_fromArray(
-						[
-							icon(checked)
-						]))));
-	});
 var $Orasund$elm_ui_framework$Framework$Grid$compact = _List_fromArray(
 	[
 		$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
@@ -21670,127 +21472,6 @@ var $Orasund$elm_ui_framework$Framework$Color$danger = _List_fromArray(
 		$mdgriffith$elm_ui$Element$Border$color($Orasund$elm_ui_framework$Framework$Color$red),
 		$mdgriffith$elm_ui$Element$Font$color($Orasund$elm_ui_framework$Framework$Color$lighterGrey)
 	]);
-var $elm$core$Basics$pi = _Basics_pi;
-var $elm$core$Basics$degrees = function (angleInDegrees) {
-	return (angleInDegrees * $elm$core$Basics$pi) / 180;
-};
-var $mdgriffith$elm_ui$Internal$Model$MoveY = function (a) {
-	return {$: 'MoveY', a: a};
-};
-var $mdgriffith$elm_ui$Internal$Model$TransformComponent = F2(
-	function (a, b) {
-		return {$: 'TransformComponent', a: a, b: b};
-	});
-var $mdgriffith$elm_ui$Internal$Flag$moveY = $mdgriffith$elm_ui$Internal$Flag$flag(26);
-var $mdgriffith$elm_ui$Element$moveUp = function (y) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$TransformComponent,
-		$mdgriffith$elm_ui$Internal$Flag$moveY,
-		$mdgriffith$elm_ui$Internal$Model$MoveY(-y));
-};
-var $mdgriffith$elm_ui$Element$rgb = F3(
-	function (r, g, b) {
-		return A4($mdgriffith$elm_ui$Internal$Model$Rgba, r, g, b, 1);
-	});
-var $mdgriffith$elm_ui$Element$rgba = $mdgriffith$elm_ui$Internal$Model$Rgba;
-var $mdgriffith$elm_ui$Internal$Model$Rotate = F2(
-	function (a, b) {
-		return {$: 'Rotate', a: a, b: b};
-	});
-var $mdgriffith$elm_ui$Internal$Flag$rotate = $mdgriffith$elm_ui$Internal$Flag$flag(24);
-var $mdgriffith$elm_ui$Element$rotate = function (angle) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$TransformComponent,
-		$mdgriffith$elm_ui$Internal$Flag$rotate,
-		A2(
-			$mdgriffith$elm_ui$Internal$Model$Rotate,
-			_Utils_Tuple3(0, 0, 1),
-			angle));
-};
-var $mdgriffith$elm_ui$Element$Border$rounded = function (radius) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$borderRound,
-		A3(
-			$mdgriffith$elm_ui$Internal$Model$Single,
-			'br-' + $elm$core$String$fromInt(radius),
-			'border-radius',
-			$elm$core$String$fromInt(radius) + 'px'));
-};
-var $mdgriffith$elm_ui$Internal$Model$boxShadowClass = function (shadow) {
-	return $elm$core$String$concat(
-		_List_fromArray(
-			[
-				shadow.inset ? 'box-inset' : 'box-',
-				$mdgriffith$elm_ui$Internal$Model$floatClass(shadow.offset.a) + 'px',
-				$mdgriffith$elm_ui$Internal$Model$floatClass(shadow.offset.b) + 'px',
-				$mdgriffith$elm_ui$Internal$Model$floatClass(shadow.blur) + 'px',
-				$mdgriffith$elm_ui$Internal$Model$floatClass(shadow.size) + 'px',
-				$mdgriffith$elm_ui$Internal$Model$formatColorClass(shadow.color)
-			]));
-};
-var $mdgriffith$elm_ui$Internal$Flag$shadows = $mdgriffith$elm_ui$Internal$Flag$flag(19);
-var $mdgriffith$elm_ui$Element$Border$shadow = function (almostShade) {
-	var shade = {blur: almostShade.blur, color: almostShade.color, inset: false, offset: almostShade.offset, size: almostShade.size};
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$shadows,
-		A3(
-			$mdgriffith$elm_ui$Internal$Model$Single,
-			$mdgriffith$elm_ui$Internal$Model$boxShadowClass(shade),
-			'box-shadow',
-			$mdgriffith$elm_ui$Internal$Model$formatBoxShadow(shade)));
-};
-var $mdgriffith$elm_ui$Element$Input$white = A3($mdgriffith$elm_ui$Element$rgb, 1, 1, 1);
-var $mdgriffith$elm_ui$Element$Input$defaultCheckbox = function (checked) {
-	return A2(
-		$mdgriffith$elm_ui$Element$el,
-		_List_fromArray(
-			[
-				$mdgriffith$elm_ui$Internal$Model$htmlClass('focusable'),
-				$mdgriffith$elm_ui$Element$width(
-				$mdgriffith$elm_ui$Element$px(14)),
-				$mdgriffith$elm_ui$Element$height(
-				$mdgriffith$elm_ui$Element$px(14)),
-				$mdgriffith$elm_ui$Element$Font$color($mdgriffith$elm_ui$Element$Input$white),
-				$mdgriffith$elm_ui$Element$centerY,
-				$mdgriffith$elm_ui$Element$Font$size(9),
-				$mdgriffith$elm_ui$Element$Font$center,
-				$mdgriffith$elm_ui$Element$Border$rounded(3),
-				$mdgriffith$elm_ui$Element$Border$color(
-				checked ? A3($mdgriffith$elm_ui$Element$rgb, 59 / 255, 153 / 255, 252 / 255) : A3($mdgriffith$elm_ui$Element$rgb, 211 / 255, 211 / 255, 211 / 255)),
-				$mdgriffith$elm_ui$Element$Border$shadow(
-				{
-					blur: 1,
-					color: checked ? A4($mdgriffith$elm_ui$Element$rgba, 238 / 255, 238 / 255, 238 / 255, 0) : A3($mdgriffith$elm_ui$Element$rgb, 238 / 255, 238 / 255, 238 / 255),
-					offset: _Utils_Tuple2(0, 0),
-					size: 1
-				}),
-				$mdgriffith$elm_ui$Element$Background$color(
-				checked ? A3($mdgriffith$elm_ui$Element$rgb, 59 / 255, 153 / 255, 252 / 255) : $mdgriffith$elm_ui$Element$Input$white),
-				$mdgriffith$elm_ui$Element$Border$width(
-				checked ? 0 : 1)
-			]),
-		checked ? A2(
-			$mdgriffith$elm_ui$Element$el,
-			_List_fromArray(
-				[
-					$mdgriffith$elm_ui$Element$Border$color($mdgriffith$elm_ui$Element$Input$white),
-					$mdgriffith$elm_ui$Element$height(
-					$mdgriffith$elm_ui$Element$px(6)),
-					$mdgriffith$elm_ui$Element$width(
-					$mdgriffith$elm_ui$Element$px(9)),
-					$mdgriffith$elm_ui$Element$rotate(
-					$elm$core$Basics$degrees(-45)),
-					$mdgriffith$elm_ui$Element$centerX,
-					$mdgriffith$elm_ui$Element$centerY,
-					$mdgriffith$elm_ui$Element$moveUp(1),
-					$mdgriffith$elm_ui$Element$Border$widthEach(
-					{bottom: 2, left: 2, right: 0, top: 0})
-				]),
-			$mdgriffith$elm_ui$Element$none) : $mdgriffith$elm_ui$Element$none);
-};
-var $mdgriffith$elm_ui$Element$fillPortion = $mdgriffith$elm_ui$Internal$Model$Fill;
 var $Orasund$elm_ui_framework$Framework$Color$grey = A3($mdgriffith$elm_ui$Element$rgb255, 122, 122, 122);
 var $Orasund$elm_ui_framework$Framework$Color$lightGrey = A3($mdgriffith$elm_ui$Element$rgb255, 219, 219, 219);
 var $mdgriffith$elm_ui$Internal$Model$Hover = {$: 'Hover'};
@@ -21802,6 +21483,10 @@ var $mdgriffith$elm_ui$Internal$Flag$hover = $mdgriffith$elm_ui$Internal$Flag$fl
 var $mdgriffith$elm_ui$Internal$Model$Nearby = F2(
 	function (a, b) {
 		return {$: 'Nearby', a: a, b: b};
+	});
+var $mdgriffith$elm_ui$Internal$Model$TransformComponent = F2(
+	function (a, b) {
+		return {$: 'TransformComponent', a: a, b: b};
 	});
 var $elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
 var $mdgriffith$elm_ui$Internal$Model$map = F2(
@@ -21948,6 +21633,41 @@ var $mdgriffith$elm_ui$Element$paddingXY = F2(
 				y,
 				x));
 	});
+var $mdgriffith$elm_ui$Element$rgba = $mdgriffith$elm_ui$Internal$Model$Rgba;
+var $mdgriffith$elm_ui$Element$Border$rounded = function (radius) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$borderRound,
+		A3(
+			$mdgriffith$elm_ui$Internal$Model$Single,
+			'br-' + $elm$core$String$fromInt(radius),
+			'border-radius',
+			$elm$core$String$fromInt(radius) + 'px'));
+};
+var $mdgriffith$elm_ui$Internal$Model$boxShadowClass = function (shadow) {
+	return $elm$core$String$concat(
+		_List_fromArray(
+			[
+				shadow.inset ? 'box-inset' : 'box-',
+				$mdgriffith$elm_ui$Internal$Model$floatClass(shadow.offset.a) + 'px',
+				$mdgriffith$elm_ui$Internal$Model$floatClass(shadow.offset.b) + 'px',
+				$mdgriffith$elm_ui$Internal$Model$floatClass(shadow.blur) + 'px',
+				$mdgriffith$elm_ui$Internal$Model$floatClass(shadow.size) + 'px',
+				$mdgriffith$elm_ui$Internal$Model$formatColorClass(shadow.color)
+			]));
+};
+var $mdgriffith$elm_ui$Internal$Flag$shadows = $mdgriffith$elm_ui$Internal$Flag$flag(19);
+var $mdgriffith$elm_ui$Element$Border$shadow = function (almostShade) {
+	var shade = {blur: almostShade.blur, color: almostShade.color, inset: false, offset: almostShade.offset, size: almostShade.size};
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$shadows,
+		A3(
+			$mdgriffith$elm_ui$Internal$Model$Single,
+			$mdgriffith$elm_ui$Internal$Model$boxShadowClass(shade),
+			'box-shadow',
+			$mdgriffith$elm_ui$Internal$Model$formatBoxShadow(shade)));
+};
 var $Orasund$elm_ui_framework$Framework$Card$simple = _List_fromArray(
 	[
 		$mdgriffith$elm_ui$Element$Border$shadow(
@@ -21976,20 +21696,6 @@ var $Orasund$elm_ui_framework$Framework$Button$simple = _Utils_ap(
 					$mdgriffith$elm_ui$Element$Border$color($Orasund$elm_ui_framework$Framework$Color$grey)
 				])),
 			A2($mdgriffith$elm_ui$Element$paddingXY, 16, 12)
-		]));
-var $Orasund$elm_ui_framework$Framework$Button$groupLeft = _Utils_ap(
-	$Orasund$elm_ui_framework$Framework$Button$simple,
-	_List_fromArray(
-		[
-			$mdgriffith$elm_ui$Element$Border$roundEach(
-			{bottomLeft: 4, bottomRight: 0, topLeft: 4, topRight: 0})
-		]));
-var $Orasund$elm_ui_framework$Framework$Button$groupRight = _Utils_ap(
-	$Orasund$elm_ui_framework$Framework$Button$simple,
-	_List_fromArray(
-		[
-			$mdgriffith$elm_ui$Element$Border$roundEach(
-			{bottomLeft: 0, bottomRight: 4, topLeft: 0, topRight: 4})
 		]));
 var $Orasund$elm_ui_framework$Framework$Button$groupTop = _Utils_ap(
 	$Orasund$elm_ui_framework$Framework$Button$simple,
@@ -22031,6 +21737,10 @@ var $Orasund$elm_ui_framework$Framework$Input$label = _List_fromArray(
 		$mdgriffith$elm_ui$Element$height($mdgriffith$elm_ui$Element$shrink),
 		$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
 	]);
+var $mdgriffith$elm_ui$Element$Input$HiddenLabel = function (a) {
+	return {$: 'HiddenLabel', a: a};
+};
+var $mdgriffith$elm_ui$Element$Input$labelHidden = $mdgriffith$elm_ui$Element$Input$HiddenLabel;
 var $mdgriffith$elm_ui$Element$Input$Label = F3(
 	function (a, b, c) {
 		return {$: 'Label', a: a, b: b, c: c};
@@ -22371,6 +22081,73 @@ var $mdgriffith$elm_ui$Element$Input$TextInputNode = function (a) {
 	return {$: 'TextInputNode', a: a};
 };
 var $mdgriffith$elm_ui$Element$Input$TextArea = {$: 'TextArea'};
+var $mdgriffith$elm_ui$Internal$Model$LivePolite = {$: 'LivePolite'};
+var $mdgriffith$elm_ui$Element$Region$announce = $mdgriffith$elm_ui$Internal$Model$Describe($mdgriffith$elm_ui$Internal$Model$LivePolite);
+var $mdgriffith$elm_ui$Element$Input$applyLabel = F3(
+	function (attrs, label, input) {
+		if (label.$ === 'HiddenLabel') {
+			var labelText = label.a;
+			return A4(
+				$mdgriffith$elm_ui$Internal$Model$element,
+				$mdgriffith$elm_ui$Internal$Model$asColumn,
+				$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
+				attrs,
+				$mdgriffith$elm_ui$Internal$Model$Unkeyed(
+					_List_fromArray(
+						[input])));
+		} else {
+			var position = label.a;
+			var labelAttrs = label.b;
+			var labelChild = label.c;
+			var labelElement = A4(
+				$mdgriffith$elm_ui$Internal$Model$element,
+				$mdgriffith$elm_ui$Internal$Model$asEl,
+				$mdgriffith$elm_ui$Internal$Model$div,
+				labelAttrs,
+				$mdgriffith$elm_ui$Internal$Model$Unkeyed(
+					_List_fromArray(
+						[labelChild])));
+			switch (position.$) {
+				case 'Above':
+					return A4(
+						$mdgriffith$elm_ui$Internal$Model$element,
+						$mdgriffith$elm_ui$Internal$Model$asColumn,
+						$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
+						attrs,
+						$mdgriffith$elm_ui$Internal$Model$Unkeyed(
+							_List_fromArray(
+								[labelElement, input])));
+				case 'Below':
+					return A4(
+						$mdgriffith$elm_ui$Internal$Model$element,
+						$mdgriffith$elm_ui$Internal$Model$asColumn,
+						$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
+						attrs,
+						$mdgriffith$elm_ui$Internal$Model$Unkeyed(
+							_List_fromArray(
+								[input, labelElement])));
+				case 'OnRight':
+					return A4(
+						$mdgriffith$elm_ui$Internal$Model$element,
+						$mdgriffith$elm_ui$Internal$Model$asRow,
+						$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
+						attrs,
+						$mdgriffith$elm_ui$Internal$Model$Unkeyed(
+							_List_fromArray(
+								[input, labelElement])));
+				default:
+					return A4(
+						$mdgriffith$elm_ui$Internal$Model$element,
+						$mdgriffith$elm_ui$Internal$Model$asRow,
+						$mdgriffith$elm_ui$Internal$Model$NodeName('label'),
+						attrs,
+						$mdgriffith$elm_ui$Internal$Model$Unkeyed(
+							_List_fromArray(
+								[labelElement, input])));
+			}
+		}
+	});
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
 var $mdgriffith$elm_ui$Element$Input$autofill = A2(
 	$elm$core$Basics$composeL,
 	$mdgriffith$elm_ui$Internal$Model$Attr,
@@ -22378,6 +22155,16 @@ var $mdgriffith$elm_ui$Element$Input$autofill = A2(
 var $mdgriffith$elm_ui$Internal$Model$Behind = {$: 'Behind'};
 var $mdgriffith$elm_ui$Element$behindContent = function (element) {
 	return A2($mdgriffith$elm_ui$Element$createNearby, $mdgriffith$elm_ui$Internal$Model$Behind, element);
+};
+var $mdgriffith$elm_ui$Internal$Model$MoveY = function (a) {
+	return {$: 'MoveY', a: a};
+};
+var $mdgriffith$elm_ui$Internal$Flag$moveY = $mdgriffith$elm_ui$Internal$Flag$flag(26);
+var $mdgriffith$elm_ui$Element$moveUp = function (y) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$TransformComponent,
+		$mdgriffith$elm_ui$Internal$Flag$moveY,
+		$mdgriffith$elm_ui$Internal$Model$MoveY(-y));
 };
 var $mdgriffith$elm_ui$Element$Input$calcMoveToCompensateForPadding = function (attrs) {
 	var gatherSpacing = F2(
@@ -22405,8 +22192,13 @@ var $mdgriffith$elm_ui$Element$Input$calcMoveToCompensateForPadding = function (
 	}
 };
 var $mdgriffith$elm_ui$Element$clip = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.clip);
+var $mdgriffith$elm_ui$Element$rgb = F3(
+	function (r, g, b) {
+		return A4($mdgriffith$elm_ui$Internal$Model$Rgba, r, g, b, 1);
+	});
 var $mdgriffith$elm_ui$Element$Input$darkGrey = A3($mdgriffith$elm_ui$Element$rgb, 186 / 255, 189 / 255, 182 / 255);
 var $mdgriffith$elm_ui$Element$Input$defaultTextPadding = A2($mdgriffith$elm_ui$Element$paddingXY, 12, 12);
+var $mdgriffith$elm_ui$Element$Input$white = A3($mdgriffith$elm_ui$Element$rgb, 1, 1, 1);
 var $mdgriffith$elm_ui$Element$Input$defaultTextBoxStyle = _List_fromArray(
 	[
 		$mdgriffith$elm_ui$Element$Input$defaultTextPadding,
@@ -22424,6 +22216,18 @@ var $mdgriffith$elm_ui$Element$Input$getHeight = function (attr) {
 		return $elm$core$Maybe$Just(h);
 	} else {
 		return $elm$core$Maybe$Nothing;
+	}
+};
+var $mdgriffith$elm_ui$Internal$Model$Label = function (a) {
+	return {$: 'Label', a: a};
+};
+var $mdgriffith$elm_ui$Element$Input$hiddenLabelAttribute = function (label) {
+	if (label.$ === 'HiddenLabel') {
+		var textLabel = label.a;
+		return $mdgriffith$elm_ui$Internal$Model$Describe(
+			$mdgriffith$elm_ui$Internal$Model$Label(textLabel));
+	} else {
+		return $mdgriffith$elm_ui$Internal$Model$NoAttribute;
 	}
 };
 var $mdgriffith$elm_ui$Element$Input$isConstrained = function (len) {
@@ -22445,6 +22249,13 @@ var $mdgriffith$elm_ui$Element$Input$isConstrained = function (len) {
 				var l = len.b;
 				return true;
 		}
+	}
+};
+var $mdgriffith$elm_ui$Element$Input$isHiddenLabel = function (label) {
+	if (label.$ === 'HiddenLabel') {
+		return true;
+	} else {
+		return false;
 	}
 };
 var $mdgriffith$elm_ui$Element$Input$isStacked = function (label) {
@@ -23056,6 +22867,167 @@ var $mdgriffith$elm_ui$Element$Input$text = $mdgriffith$elm_ui$Element$Input$tex
 		spellchecked: false,
 		type_: $mdgriffith$elm_ui$Element$Input$TextInputNode('text')
 	});
+var $author$project$Data$FormField$toValue = function (_v0) {
+	var value = _v0.a.value;
+	return value;
+};
+var $author$project$Data$FormField$unWrap = function (_v0) {
+	var raw = _v0.a.raw;
+	var errors = _v0.a.errors;
+	return {errors: errors, raw: raw};
+};
+var $Orasund$elm_ui_framework$Framework$Button$groupCenter = _Utils_ap(
+	$Orasund$elm_ui_framework$Framework$Button$simple,
+	_List_fromArray(
+		[
+			$mdgriffith$elm_ui$Element$Border$rounded(0)
+		]));
+var $Orasund$elm_ui_framework$Framework$Button$groupLeft = _Utils_ap(
+	$Orasund$elm_ui_framework$Framework$Button$simple,
+	_List_fromArray(
+		[
+			$mdgriffith$elm_ui$Element$Border$roundEach(
+			{bottomLeft: 4, bottomRight: 0, topLeft: 4, topRight: 0})
+		]));
+var $Orasund$elm_ui_framework$Framework$Button$groupRight = _Utils_ap(
+	$Orasund$elm_ui_framework$Framework$Button$simple,
+	_List_fromArray(
+		[
+			$mdgriffith$elm_ui$Element$Border$roundEach(
+			{bottomLeft: 0, bottomRight: 4, topLeft: 0, topRight: 4})
+		]));
+var $author$project$View$RangeInput$view = function (_v0) {
+	var minValue = _v0.minValue;
+	var maxValue = _v0.maxValue;
+	var onChange = _v0.onChange;
+	var value = _v0.value;
+	var label = _v0.label;
+	var button = F2(
+		function (attribute, num) {
+			return A2(
+				$mdgriffith$elm_ui$Element$Input$button,
+				_Utils_ap(
+					attribute,
+					_Utils_ap(
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+							]),
+						_Utils_eq(num, value) ? $Orasund$elm_ui_framework$Framework$Color$primary : _List_Nil)),
+				{
+					label: $mdgriffith$elm_ui$Element$text(
+						$elm$core$String$fromInt(num)),
+					onPress: $elm$core$Maybe$Just(
+						onChange(num))
+				});
+		});
+	return A2(
+		$mdgriffith$elm_ui$Element$row,
+		$Orasund$elm_ui_framework$Framework$Grid$spaceEvenly,
+		_List_fromArray(
+			[
+				A2(
+				$mdgriffith$elm_ui$Element$paragraph,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+					]),
+				$elm$core$List$singleton(
+					$mdgriffith$elm_ui$Element$text(label))),
+				A2(
+				$mdgriffith$elm_ui$Element$row,
+				_Utils_ap(
+					$Orasund$elm_ui_framework$Framework$Grid$compact,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+						])),
+				$elm$core$List$concat(
+					_List_fromArray(
+						[
+							$elm$core$List$singleton(
+							A2(button, $Orasund$elm_ui_framework$Framework$Button$groupLeft, minValue)),
+							A2(
+							$elm$core$List$map,
+							button($Orasund$elm_ui_framework$Framework$Button$groupCenter),
+							A2($elm$core$List$range, minValue + 1, maxValue - 1)),
+							$elm$core$List$singleton(
+							A2(button, $Orasund$elm_ui_framework$Framework$Button$groupRight, maxValue))
+						])))
+			]));
+};
+var $author$project$View$ToggleInput$view = function (_v0) {
+	var onChange = _v0.onChange;
+	var value = _v0.value;
+	var label = _v0.label;
+	var button = F2(
+		function (attribute, bool) {
+			return A2(
+				$mdgriffith$elm_ui$Element$Input$button,
+				_Utils_ap(
+					attribute,
+					_Utils_ap(
+						_List_fromArray(
+							[
+								$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+							]),
+						function () {
+							var _v1 = _Utils_Tuple2(value, bool);
+							_v1$2:
+							while (true) {
+								if (_v1.a) {
+									if (_v1.b) {
+										return $Orasund$elm_ui_framework$Framework$Color$success;
+									} else {
+										break _v1$2;
+									}
+								} else {
+									if (!_v1.b) {
+										return $Orasund$elm_ui_framework$Framework$Color$primary;
+									} else {
+										break _v1$2;
+									}
+								}
+							}
+							return _List_Nil;
+						}())),
+				{
+					label: $mdgriffith$elm_ui$Element$text(''),
+					onPress: $elm$core$Maybe$Just(
+						onChange(bool))
+				});
+		});
+	return A2(
+		$mdgriffith$elm_ui$Element$row,
+		$Orasund$elm_ui_framework$Framework$Grid$spaceEvenly,
+		_List_fromArray(
+			[
+				A2(
+				$mdgriffith$elm_ui$Element$paragraph,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+					]),
+				$elm$core$List$singleton(
+					$mdgriffith$elm_ui$Element$text(label))),
+				A2(
+				$mdgriffith$elm_ui$Element$row,
+				_Utils_ap(
+					$Orasund$elm_ui_framework$Framework$Grid$compact,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+						])),
+				$elm$core$List$concat(
+					_List_fromArray(
+						[
+							$elm$core$List$singleton(
+							A2(button, $Orasund$elm_ui_framework$Framework$Button$groupLeft, false)),
+							$elm$core$List$singleton(
+							A2(button, $Orasund$elm_ui_framework$Framework$Button$groupRight, true))
+						])))
+			]));
+};
 var $author$project$Main$view = function (model) {
 	var toTitle = A2(
 		$elm$core$Basics$composeR,
@@ -23071,85 +23043,11 @@ var $author$project$Main$view = function (model) {
 				function ($) {
 					return $.title;
 				})));
-	var numberInput = function (_v1) {
-		var onDecrease = _v1.onDecrease;
-		var onIncrease = _v1.onIncrease;
-		var value = _v1.value;
-		var label = _v1.label;
-		return A2(
-			$mdgriffith$elm_ui$Element$row,
-			_List_fromArray(
-				[
-					$mdgriffith$elm_ui$Element$spacing(5),
-					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$mdgriffith$elm_ui$Element$el,
-					$Orasund$elm_ui_framework$Framework$Input$label,
-					$mdgriffith$elm_ui$Element$text(label)),
-					A2(
-					$mdgriffith$elm_ui$Element$row,
-					_Utils_ap(
-						_List_fromArray(
-							[
-								$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
-							]),
-						$Orasund$elm_ui_framework$Framework$Grid$simple),
-					_List_fromArray(
-						[
-							A2(
-							$mdgriffith$elm_ui$Element$el,
-							_List_fromArray(
-								[
-									$mdgriffith$elm_ui$Element$Font$center,
-									$mdgriffith$elm_ui$Element$width(
-									$mdgriffith$elm_ui$Element$fillPortion(2))
-								]),
-							$mdgriffith$elm_ui$Element$text(
-								$elm$core$String$fromInt(value))),
-							A2(
-							$mdgriffith$elm_ui$Element$row,
-							$Orasund$elm_ui_framework$Framework$Grid$compact,
-							_List_fromArray(
-								[
-									A2(
-									$mdgriffith$elm_ui$Element$Input$button,
-									_Utils_ap(
-										$Orasund$elm_ui_framework$Framework$Button$groupLeft,
-										_List_fromArray(
-											[
-												$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-												$mdgriffith$elm_ui$Element$alignLeft
-											])),
-									{
-										label: $mdgriffith$elm_ui$Element$text('-'),
-										onPress: $elm$core$Maybe$Just(onDecrease)
-									}),
-									A2(
-									$mdgriffith$elm_ui$Element$Input$button,
-									_Utils_ap(
-										$Orasund$elm_ui_framework$Framework$Button$groupRight,
-										_Utils_ap(
-											$Orasund$elm_ui_framework$Framework$Color$primary,
-											_List_fromArray(
-												[
-													$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-													$mdgriffith$elm_ui$Element$alignRight
-												]))),
-									{
-										label: $mdgriffith$elm_ui$Element$text('+'),
-										onPress: $elm$core$Maybe$Just(onIncrease)
-									})
-								]))
-						]))
-				]));
-	};
 	var editedCard = A2(
 		$elm$core$Maybe$withDefault,
 		$author$project$Data$Card$empty(1),
 		A2($elm$core$Array$get, model.editing, model.cards));
+	var cardsPerPage = $author$project$Data$FormField$toValue(model.config.cardsPerPage);
 	var cards = (model.showGui ? A2(
 		$elm$core$Basics$composeR,
 		$elm$core$List$indexedMap(
@@ -23233,8 +23131,8 @@ var $author$project$Main$view = function (model) {
 		$elm$core$Array$toList(model.cards));
 	var emptyCards = A2(
 		$elm$core$Basics$modBy,
-		model.config.cardsPerPage,
-		model.config.cardsPerPage - $elm$core$List$length(cards));
+		cardsPerPage,
+		cardsPerPage - $elm$core$List$length(cards));
 	var displayCards = A2(
 		$mdgriffith$elm_ui$Element$paragraph,
 		_List_fromArray(
@@ -23288,7 +23186,7 @@ var $author$project$Main$view = function (model) {
 		$Orasund$elm_ui_framework$Framework$layout(_List_Nil),
 		$mdgriffith$elm_ui$Element$el($Orasund$elm_ui_framework$Framework$container)) : $mdgriffith$elm_ui$Element$layout(_List_Nil))(
 		model.showGui ? A2(
-			$mdgriffith$elm_ui$Element$row,
+			$mdgriffith$elm_ui$Element$paragraph,
 			_Utils_ap(
 				$Orasund$elm_ui_framework$Framework$Grid$spacedEvenly,
 				_List_fromArray(
@@ -23297,16 +23195,6 @@ var $author$project$Main$view = function (model) {
 					])),
 			_List_fromArray(
 				[
-					A2(
-					$mdgriffith$elm_ui$Element$el,
-					_List_fromArray(
-						[
-							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-							$mdgriffith$elm_ui$Element$scrollbarY,
-							$mdgriffith$elm_ui$Element$height(
-							$mdgriffith$elm_ui$Element$px(650))
-						]),
-					displayCards),
 					A2(
 					$mdgriffith$elm_ui$Element$column,
 					_Utils_ap(
@@ -23362,28 +23250,35 @@ var $author$project$Main$view = function (model) {
 									model.showConfig ? _List_fromArray(
 										[
 											A2(
-											$mdgriffith$elm_ui$Element$Input$text,
-											$Orasund$elm_ui_framework$Framework$Input$simple,
-											{
-												label: A2(
-													$mdgriffith$elm_ui$Element$Input$labelLeft,
-													$Orasund$elm_ui_framework$Framework$Input$label,
+											$mdgriffith$elm_ui$Element$row,
+											$Orasund$elm_ui_framework$Framework$Grid$spaceEvenly,
+											_List_fromArray(
+												[
+													A2(
+													$mdgriffith$elm_ui$Element$el,
+													_List_fromArray(
+														[
+															$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+														]),
 													$mdgriffith$elm_ui$Element$text('Cards Per Page')),
-												onChange: A2($elm$core$Basics$composeL, $author$project$Main$ChangedConfigField, $author$project$Main$CardsPerPage),
-												placeholder: $elm$core$Maybe$Nothing,
-												text: model.configForm.cardsPerPage
-											}),
-											A2(
-											$mdgriffith$elm_ui$Element$Input$checkbox,
-											_List_Nil,
+													A2(
+													$mdgriffith$elm_ui$Element$Input$text,
+													_Utils_ap(
+														$elm$core$List$isEmpty(
+															$author$project$Data$FormField$unWrap(model.config.cardsPerPage).errors) ? _List_Nil : $Orasund$elm_ui_framework$Framework$Color$danger,
+														$Orasund$elm_ui_framework$Framework$Input$simple),
+													{
+														label: $mdgriffith$elm_ui$Element$Input$labelHidden('Cards Per Page'),
+														onChange: A2($elm$core$Basics$composeL, $author$project$Main$ChangedConfigField, $author$project$Main$CardsPerPage),
+														placeholder: $elm$core$Maybe$Nothing,
+														text: $author$project$Data$FormField$unWrap(model.config.cardsPerPage).raw
+													})
+												])),
+											$author$project$View$ToggleInput$view(
 											{
-												checked: model.config.blackAndWhite,
-												icon: $mdgriffith$elm_ui$Element$Input$defaultCheckbox,
-												label: A2(
-													$mdgriffith$elm_ui$Element$Input$labelLeft,
-													$Orasund$elm_ui_framework$Framework$Input$label,
-													$mdgriffith$elm_ui$Element$text('Black and White Mode')),
-												onChange: A2($elm$core$Basics$composeL, $author$project$Main$ChangedConfigField, $author$project$Main$BlackAndWhite)
+												label: 'Black and White Mode',
+												onChange: A2($elm$core$Basics$composeL, $author$project$Main$ChangedConfigField, $author$project$Main$BlackAndWhite),
+												value: model.config.blackAndWhite
 											})
 										]) : function (_v0) {
 										var g1 = _v0.g1;
@@ -23394,125 +23289,99 @@ var $author$project$Main$view = function (model) {
 										var b2 = _v0.b2;
 										var y1 = _v0.y1;
 										var y2 = _v0.y2;
-										return _List_fromArray(
-											[
-												A2(
-												$mdgriffith$elm_ui$Element$Input$text,
-												$Orasund$elm_ui_framework$Framework$Input$simple,
-												{
-													label: A2(
-														$mdgriffith$elm_ui$Element$Input$labelLeft,
-														$Orasund$elm_ui_framework$Framework$Input$label,
-														$mdgriffith$elm_ui$Element$text('Name')),
-													onChange: $author$project$Main$ChangedName,
-													placeholder: $elm$core$Maybe$Nothing,
-													text: editedCard.name
-												}),
-												A2(
-												$mdgriffith$elm_ui$Element$Input$text,
-												$Orasund$elm_ui_framework$Framework$Input$simple,
-												{
-													label: A2(
-														$mdgriffith$elm_ui$Element$Input$labelLeft,
-														$Orasund$elm_ui_framework$Framework$Input$label,
-														$mdgriffith$elm_ui$Element$text('Image Link')),
-													onChange: $author$project$Main$ChangedImg,
-													placeholder: $elm$core$Maybe$Nothing,
-													text: editedCard.img
-												}),
-												numberInput(
-												{label: 'Amount', onDecrease: $author$project$Main$DecreaseAmount, onIncrease: $author$project$Main$IncreaseAmount, value: editedCard.amount}),
-												A2(
-												$mdgriffith$elm_ui$Element$row,
-												$Orasund$elm_ui_framework$Framework$Grid$spacedEvenly,
-												_List_fromArray(
+										return $elm$core$List$concat(
+											_List_fromArray(
+												[
+													_List_fromArray(
 													[
 														A2(
-														$mdgriffith$elm_ui$Element$Input$checkbox,
-														_List_Nil,
+														$mdgriffith$elm_ui$Element$Input$text,
+														$Orasund$elm_ui_framework$Framework$Input$simple,
 														{
-															checked: g2,
-															icon: $mdgriffith$elm_ui$Element$Input$defaultCheckbox,
 															label: A2(
 																$mdgriffith$elm_ui$Element$Input$labelLeft,
 																$Orasund$elm_ui_framework$Framework$Input$label,
-																$mdgriffith$elm_ui$Element$text(
-																	toTitle($author$project$Data$Base$G2))),
-															onChange: function (b) {
-																return (b ? $author$project$Main$AddComponent : $author$project$Main$RemoveComponent)($author$project$Data$Base$G2);
-															}
+																$mdgriffith$elm_ui$Element$text('Name')),
+															onChange: $author$project$Main$ChangedName,
+															placeholder: $elm$core$Maybe$Nothing,
+															text: editedCard.name
 														}),
 														A2(
-														$mdgriffith$elm_ui$Element$Input$checkbox,
-														_List_Nil,
+														$mdgriffith$elm_ui$Element$Input$text,
+														$Orasund$elm_ui_framework$Framework$Input$simple,
 														{
-															checked: y2,
-															icon: $mdgriffith$elm_ui$Element$Input$defaultCheckbox,
 															label: A2(
 																$mdgriffith$elm_ui$Element$Input$labelLeft,
 																$Orasund$elm_ui_framework$Framework$Input$label,
-																$mdgriffith$elm_ui$Element$text(
-																	toTitle($author$project$Data$Base$Y2))),
-															onChange: function (b) {
-																return (b ? $author$project$Main$AddComponent : $author$project$Main$RemoveComponent)($author$project$Data$Base$Y2);
-															}
-														})
-													])),
-												numberInput(
-												{
-													label: toTitle($author$project$Data$Base$B2),
-													onDecrease: $author$project$Main$RemoveComponent($author$project$Data$Base$B2),
-													onIncrease: $author$project$Main$AddComponent($author$project$Data$Base$B2),
-													value: b2
-												}),
-												numberInput(
-												{
-													label: toTitle($author$project$Data$Base$B1),
-													onDecrease: $author$project$Main$RemoveComponent($author$project$Data$Base$B1),
-													onIncrease: $author$project$Main$AddComponent($author$project$Data$Base$B1),
-													value: b1
-												}),
-												numberInput(
-												{
-													label: toTitle($author$project$Data$Base$Y1),
-													onDecrease: $author$project$Main$RemoveComponent($author$project$Data$Base$Y1),
-													onIncrease: $author$project$Main$AddComponent($author$project$Data$Base$Y1),
-													value: y1
-												}),
-												numberInput(
-												{
-													label: toTitle($author$project$Data$Base$G1),
-													onDecrease: $author$project$Main$RemoveComponent($author$project$Data$Base$G1),
-													onIncrease: $author$project$Main$AddComponent($author$project$Data$Base$G1),
-													value: g1
-												}),
-												numberInput(
-												{
-													label: toTitle($author$project$Data$Base$R1),
-													onDecrease: $author$project$Main$RemoveComponent($author$project$Data$Base$R1),
-													onIncrease: $author$project$Main$AddComponent($author$project$Data$Base$R1),
-													value: r1
-												}),
-												numberInput(
-												{
-													label: toTitle($author$project$Data$Base$R2),
-													onDecrease: $author$project$Main$RemoveComponent($author$project$Data$Base$R2),
-													onIncrease: $author$project$Main$AddComponent($author$project$Data$Base$R2),
-													value: r2
-												}),
-												A2(
-												$mdgriffith$elm_ui$Element$Input$button,
-												_Utils_ap(
-													$Orasund$elm_ui_framework$Framework$Button$simple,
-													_Utils_ap(
-														$Orasund$elm_ui_framework$Framework$Color$danger,
+																$mdgriffith$elm_ui$Element$text('Image Link')),
+															onChange: $author$project$Main$ChangedImg,
+															placeholder: $elm$core$Maybe$Nothing,
+															text: editedCard.img
+														}),
+														$author$project$View$RangeInput$view(
+														{label: 'Amount', maxValue: 3, minValue: 1, onChange: $author$project$Main$ChangeAmount, value: editedCard.amount}),
+														A2(
+														$mdgriffith$elm_ui$Element$row,
+														$Orasund$elm_ui_framework$Framework$Grid$simple,
 														_List_fromArray(
-															[$mdgriffith$elm_ui$Element$alignRight]))),
-												{
-													label: $mdgriffith$elm_ui$Element$text('Remove'),
-													onPress: $elm$core$Maybe$Just($author$project$Main$DeletedSelected)
-												})
-											]);
+															[
+																$author$project$View$ToggleInput$view(
+																{
+																	label: toTitle($author$project$Data$Base$G2),
+																	onChange: function (b) {
+																		return b ? A2($author$project$Main$ChangeComponent, $author$project$Data$Base$G2, 1) : A2($author$project$Main$ChangeComponent, $author$project$Data$Base$G2, 0);
+																	},
+																	value: g2
+																}),
+																$author$project$View$ToggleInput$view(
+																{
+																	label: toTitle($author$project$Data$Base$Y2),
+																	onChange: function (b) {
+																		return b ? A2($author$project$Main$ChangeComponent, $author$project$Data$Base$Y2, 1) : A2($author$project$Main$ChangeComponent, $author$project$Data$Base$Y2, 0);
+																	},
+																	value: y2
+																})
+															]))
+													]),
+													A2(
+													$elm$core$List$map,
+													function (_v1) {
+														var value = _v1.a;
+														var base = _v1.b;
+														return $author$project$View$RangeInput$view(
+															{
+																label: toTitle(base),
+																maxValue: 3,
+																minValue: 0,
+																onChange: $author$project$Main$ChangeComponent(base),
+																value: value
+															});
+													},
+													_List_fromArray(
+														[
+															_Utils_Tuple2(b2, $author$project$Data$Base$B2),
+															_Utils_Tuple2(b1, $author$project$Data$Base$B1),
+															_Utils_Tuple2(y1, $author$project$Data$Base$Y1),
+															_Utils_Tuple2(g1, $author$project$Data$Base$G1),
+															_Utils_Tuple2(r1, $author$project$Data$Base$R1),
+															_Utils_Tuple2(r2, $author$project$Data$Base$R2)
+														])),
+													_List_fromArray(
+													[
+														A2(
+														$mdgriffith$elm_ui$Element$Input$button,
+														_Utils_ap(
+															$Orasund$elm_ui_framework$Framework$Button$simple,
+															_Utils_ap(
+																$Orasund$elm_ui_framework$Framework$Color$danger,
+																_List_fromArray(
+																	[$mdgriffith$elm_ui$Element$alignRight]))),
+														{
+															label: $mdgriffith$elm_ui$Element$text('Remove'),
+															onPress: $elm$core$Maybe$Just($author$project$Main$DeletedSelected)
+														})
+													])
+												]));
 									}(editedCard.composition))
 								])),
 							A2(
@@ -23542,7 +23411,17 @@ var $author$project$Main$view = function (model) {
 										onPress: $elm$core$Maybe$Just($author$project$Main$Save)
 									})
 								]))
-						]))
+						])),
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+							$mdgriffith$elm_ui$Element$scrollbarY,
+							$mdgriffith$elm_ui$Element$height(
+							$mdgriffith$elm_ui$Element$px(650))
+						]),
+					displayCards)
 				])) : A2(
 			$mdgriffith$elm_ui$Element$column,
 			_List_fromArray(

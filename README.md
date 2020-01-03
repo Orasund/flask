@@ -42,3 +42,11 @@ The project is still in an early alpha state. Thats why the description is mostl
 * Ein Deck besteht auf 15 Karten
 * Jede Karte ist aus Basiskarten zusammengesetzt, hierfür kann der [Online-Editor](https://orasund.github.io/flask/) benützt werden.
 * Eine Karte darf bis zu 3 Mal in einem Deck erscheinen. Ein gewöhnliches Deck ist demnach auf 5 verschiedenen Karten aufgebaut.
+
+## Effektivität der Karten-Decks
+
+|         |💥|📘|💚|💰|
+|Gegen 💥|   |  |👎|👍|
+|Gegen 📘|   |  |👍|👎|
+|Gegen 💚|👍|👎|  |  |
+|Gegen 💰|👎|👍|  |   |

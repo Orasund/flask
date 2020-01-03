@@ -1,0 +1,82 @@
+[
+  {
+    "amount": 3,
+    "img": "https://freesvg.org/img/AbstractDesign6.png",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 2,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Double Sabotage"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/1312746.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 1,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 2,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Applied Double Sabotage"
+  },
+  {
+    "amount": 3,
+    "img": "https://freesvg.org/img/AbstractDesign.png",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 1,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Research"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/1826806.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 2,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": " Double Apply"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/1803539.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 1,
+      "b1": 1,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 1,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Dangerous Knowledge"
+  }
+]

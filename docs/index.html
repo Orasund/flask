@@ -20983,7 +20983,7 @@ var $stephenreddek$elm_emoji$Emoji$textWith = F2(
 var $elm$core$String$toUpper = _String_toUpper;
 var $author$project$View$text = F3(
 	function (blackAndWhite, _int, string) {
-		var scale = 1.1;
+		var scale = 1.17;
 		var diff = $elm$core$Basics$mul(scale - 1);
 		return $mdgriffith$elm_ui$Element$html(
 			A2(
@@ -21011,7 +21011,8 @@ var $author$project$View$text = F3(
 											'',
 											A2($elm$core$List$intersperse, '-', list))) + '.svg')))),
 									$elm$html$Html$Attributes$height(
-									$elm$core$Basics$round(scale * _int))
+									$elm$core$Basics$round(scale * _int)),
+									A2($elm$html$Html$Attributes$style, 'vertical-align', 'middle')
 								]),
 							_List_Nil);
 					},
@@ -21141,7 +21142,7 @@ var $author$project$Data$Effect$toTextField = function (effect) {
 		case 'Discard':
 			var n = effect.a;
 			return {
-				desc: 'Ein Gegner legt ' + (((n <= 1) ? 'eine Handkarte oder Reaktionskarte' : ($elm$core$String$fromInt(n) + ' Handkarten und/oder Reaktionskarten')) + ' der eigenen Wahl auf den Ablagestape. Hat der Gegner zu wenig Karten, werden die übrigen Karten vom Nachziehstapel genommen. Der Gegner hat das Spiel verloren sobald am Anfang des eigenen Zuges keine Karte mehr auf den Nachziehstapel liegt.'),
+				desc: 'Ein Gegner legt ' + (((n <= 1) ? 'eine Handkarte' : ($elm$core$String$fromInt(n) + ' Handkarten')) + ' der eigenen Wahl auf den Ablagestape. Hat der Gegner zu wenig Karten, werden die übrigen Karten vom Nachziehstapel genommen. Der Gegner hat das Spiel verloren sobald am Anfang des eigenen Zuges keine Karte mehr auf den Nachziehstapel liegt.'),
 				title: 'Action: -' + ($elm$core$String$fromInt(n) + ' Cards')
 			};
 		case 'Reboot':
@@ -21379,7 +21380,7 @@ var $author$project$View$Card$view = function (_v0) {
 						_List_fromArray(
 							[
 								$mdgriffith$elm_ui$Element$text(code),
-								$mdgriffith$elm_ui$Element$text('v0.3.0')
+								$mdgriffith$elm_ui$Element$text('v0.4.0')
 							])))
 				])));
 };

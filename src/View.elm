@@ -12,7 +12,7 @@ text blackAndWhite int string =
     let
         scale : Float
         scale =
-            1.1
+            1.17
 
         diff : Float -> Float
         diff =
@@ -40,6 +40,7 @@ text blackAndWhite int string =
                                 ++ (List.intersperse "-" list |> String.join "" |> String.toUpper)
                                 ++ ".svg"
                         , Attributes.height <| round <| (*) scale <| toFloat int
+                        , Attributes.style "vertical-align" "middle"
                         ]
                         []
                 )

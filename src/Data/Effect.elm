@@ -143,10 +143,10 @@ toTextField effect =
             , desc =
                 "Ein Gegner legt "
                     ++ (if n <= 1 then
-                            "eine Handkarte oder Reaktionskarte"
+                            "eine Handkarte"
 
                         else
-                            String.fromInt n ++ " Handkarten und/oder Reaktionskarten"
+                            String.fromInt n ++ " Handkarten"
                        )
                     ++ " der eigenen Wahl auf den Ablagestape. Hat der Gegner zu wenig Karten, werden die übrigen Karten vom Nachziehstapel genommen. Der Gegner hat das Spiel verloren sobald am Anfang des eigenen Zuges keine Karte mehr auf den Nachziehstapel liegt."
             }

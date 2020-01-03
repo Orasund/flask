@@ -35,7 +35,7 @@ view { onChange, value, label } =
             List.singleton <|
                 Element.text <|
                     label
-        , Element.row (Grid.compact ++ [ Element.width <| Element.fill ]) <|
+        , Element.row (Grid.compact ++ [ Element.width <| Element.maximum 80 <| Element.fill ]) <|
             List.concat <|
                 [ List.singleton <| button Button.groupLeft False
                 , List.singleton <| button Button.groupRight True

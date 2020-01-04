@@ -13286,8 +13286,6 @@ var $mdgriffith$elm_ui$Internal$Model$AlignY = function (a) {
 };
 var $mdgriffith$elm_ui$Internal$Model$Bottom = {$: 'Bottom'};
 var $mdgriffith$elm_ui$Element$alignBottom = $mdgriffith$elm_ui$Internal$Model$AlignY($mdgriffith$elm_ui$Internal$Model$Bottom);
-var $mdgriffith$elm_ui$Internal$Model$Top = {$: 'Top'};
-var $mdgriffith$elm_ui$Element$alignTop = $mdgriffith$elm_ui$Internal$Model$AlignY($mdgriffith$elm_ui$Internal$Model$Top);
 var $author$project$Data$cardHeight = $elm$core$Basics$round(160 * $author$project$Data$baseMult);
 var $author$project$Data$cardWidth = $elm$core$Basics$round(100 * $author$project$Data$baseMult);
 var $mdgriffith$elm_ui$Internal$Flag$fontAlignment = $mdgriffith$elm_ui$Internal$Flag$flag(12);
@@ -21131,7 +21129,7 @@ var $author$project$Data$Effect$toTextField = function (effect) {
 			var n = effect.a;
 			return {
 				desc: 'Ziehe ' + (((n <= 1) ? 'eine Karte' : ($elm$core$String$fromInt(n) + ' Karten')) + (' des Nachzieh- ' + (((n <= 1) ? 'oder' : 'und/oder') + ' Ablagestapels.'))),
-				title: 'Draw ' + ($elm$core$String$fromInt(n) + ' Card')
+				title: 'Draw ' + ($elm$core$String$fromInt(n) + ((n <= 1) ? ' Card' : ' Cards'))
 			};
 		case 'Remove':
 			var n = effect.a;
@@ -21268,9 +21266,7 @@ var $author$project$View$Card$view = function (_v0) {
 				$mdgriffith$elm_ui$Element$Border$color(
 				A3($mdgriffith$elm_ui$Element$rgb255, 0, 0, 0)),
 				$mdgriffith$elm_ui$Element$spacing(
-				$elm$core$Basics$round(1 * $author$project$Data$spacingMult)),
-				$mdgriffith$elm_ui$Element$alignTop,
-				$mdgriffith$elm_ui$Element$alignLeft
+				$elm$core$Basics$round(1 * $author$project$Data$spacingMult))
 			]),
 		$elm$core$List$concat(
 			_List_fromArray(
@@ -21380,7 +21376,7 @@ var $author$project$View$Card$view = function (_v0) {
 						_List_fromArray(
 							[
 								$mdgriffith$elm_ui$Element$text(code),
-								$mdgriffith$elm_ui$Element$text('v0.4.0')
+								$mdgriffith$elm_ui$Element$text('v0.4.1')
 							])))
 				])));
 };
@@ -21427,6 +21423,8 @@ var $author$project$Main$card = F2(
 	});
 var $mdgriffith$elm_ui$Internal$Model$CenterY = {$: 'CenterY'};
 var $mdgriffith$elm_ui$Element$centerY = $mdgriffith$elm_ui$Internal$Model$AlignY($mdgriffith$elm_ui$Internal$Model$CenterY);
+var $mdgriffith$elm_ui$Internal$Model$Top = {$: 'Top'};
+var $mdgriffith$elm_ui$Element$alignTop = $mdgriffith$elm_ui$Internal$Model$AlignY($mdgriffith$elm_ui$Internal$Model$Top);
 var $Orasund$elm_ui_framework$Framework$Grid$compact = _List_fromArray(
 	[
 		$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),

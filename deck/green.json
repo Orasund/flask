@@ -1,0 +1,82 @@
+[
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/1295198.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 2,
+      "y2": false,
+      "y1": 0
+    },
+    "name": " Double Attack"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/297541.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": true,
+      "g1": 0,
+      "r2": 0,
+      "r1": 1,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Dangerous Reaction"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/1299159.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": true,
+      "g1": 0,
+      "r2": 0,
+      "r1": 2,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Very Dangerous Reaction"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/1829851.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 2,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": "Double Balance"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/297380.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 1,
+      "r2": 0,
+      "r1": 1,
+      "y2": false,
+      "y1": 0
+    },
+    "name": " Balanced Attack"
+  }
+]

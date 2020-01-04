@@ -4,7 +4,7 @@ A open source collectable card game
 
 ## State of the project
 
-The project is still in an early alpha state. Thats why the description is mostly in german. In a later state the cards as well as the roles will be available in englisch and german.
+The project is still in an early alpha state. Thats why the description is mostly in german. In a later state the cards and the rules will be available in englisch and german.
 
 ## Spielaufbau
 

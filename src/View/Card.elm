@@ -112,8 +112,9 @@ view { name, cost, effects, hasDesc, code, img, blackAndWhite } =
         , Border.solid
         , Border.color <| Element.rgb255 0 0 0
         , Element.spacing <| round <| 1 * spacingMult
-        , Element.alignTop
-        , Element.alignLeft
+
+        --, Element.alignTop
+        --, Element.alignLeft
         ]
     <|
         List.concat
@@ -207,6 +208,6 @@ view { name, cost, effects, hasDesc, code, img, blackAndWhite } =
                     ]
                 <|
                     [ Element.text code
-                    , Element.text "v0.4.0"
+                    , Element.text "v0.4.1"
                     ]
             ]

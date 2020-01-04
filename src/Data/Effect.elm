@@ -98,7 +98,15 @@ toTextField effect =
             }
 
         Draw n ->
-            { title = "Draw " ++ String.fromInt n ++ " Card"
+            { title =
+                "Draw "
+                    ++ String.fromInt n
+                    ++ (if n <= 1 then
+                            " Card"
+
+                        else
+                            " Cards"
+                       )
             , desc =
                 "Ziehe "
                     ++ (if n <= 1 then

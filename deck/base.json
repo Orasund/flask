@@ -61,7 +61,7 @@
       "y2": false,
       "y1": 0
     },
-    "name": " Sabotage"
+    "name": "Sabotage"
   },
   {
     "amount": 1,
@@ -77,7 +77,7 @@
       "y2": false,
       "y1": 1
     },
-    "name": " Profit"
+    "name": "Profit"
   },
   {
     "amount": 1,
@@ -93,7 +93,7 @@
       "y2": true,
       "y1": 0
     },
-    "name": " Reboot"
+    "name": "Reboot"
   },
   {
     "amount": 1,
@@ -109,7 +109,7 @@
       "y2": false,
       "y1": 0
     },
-    "name": "Exchange "
+    "name": "Balance"
   },
   {
     "amount": 1,
@@ -125,6 +125,6 @@
       "y2": false,
       "y1": 0
     },
-    "name": " Reaction"
+    "name": "Reaction"
   }
 ]

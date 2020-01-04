@@ -1,0 +1,82 @@
+[
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/2027139.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 1,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": " Sabotage"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/2027551.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 2,
+      "y2": true,
+      "y1": 0
+    },
+    "name": "Returning Double Attack"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/145828.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 3,
+      "y2": false,
+      "y1": 0
+    },
+    "name": " Triple Attack"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/41342.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 2,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 1
+    },
+    "name": " Profitable Double Balance"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/264516.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 2,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 0
+    },
+    "name": " Double Exchange"
+  }
+]

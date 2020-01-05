@@ -94,7 +94,7 @@ toTextField effect =
 
         Choose ->
             { title = "+2 Resources of one kind"
-            , desc = "Füge entweder 💰💰 , 💥💥 , 📘📘 oder 💚💚 zu deinem Counter hinzu"
+            , desc = "Füge entweder 💰💰 , 💥💥 , 📘📘 oder 💚💚 zu deinem Counter hinzu.  Am Ende des Zuges dürfen die Counter maximal 6 anzeigen, alle weiteren Ressourcen verfallen."
             }
 
         Draw n ->

@@ -208,6 +208,6 @@ view { name, cost, effects, hasDesc, code, img, blackAndWhite } =
                     ]
                 <|
                     [ Element.text code
-                    , Element.text "v0.4.1"
+                    , Element.text "v0.4.2"
                     ]
             ]

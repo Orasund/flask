@@ -27,12 +27,12 @@ The game is turn-based and is played clock wise. A turn consists of four phases:
 ### Playing a card
 
 * To play a card the name must be read out loud and the card must be displayed on the table, for everyone to see.
-* Now the costs of the card, written on top (❔ symbolized an arbitary resource), will be payed.
+* Now the costs of the card, written on top (❔ symbolizes an arbitary resource), will be payed.
 * Finally the Cards gets activated and the effect gets executed.
 
 So called _Reaction cards_ have a special rule:
 
-* Once a raction card is placed face down on the table, it can be played any time (in particular during the enemy turn). This must happen before the cost of the card are fully payed.
+* Once a reaction card is placed face down on the table, it can be played any time (in particular during the enemy turn). This must happen before the cost of the card are fully payed.
 * Once the reaction card is activated the effect will be executed **before** the enemy card is played, essentially blocking.
 * If costs have already been payed, they need to be returned.
 
@@ -46,10 +46,10 @@ So called _Reaction cards_ have a special rule:
 
 |         |💥|📘|💚|💰|
 |---------|--|--|---|--|
-|Gegen 💥|   |  |👎|👍|
-|Gegen 📘|   |  |👍|👎|
-|Gegen 💚|👍|👎|  |  |
-|Gegen 💰|👎|👍|  |   |
+|v.s. 💥|   |  |👎|👍|
+|v.s. 📘|   |  |👍|👎|
+|v.s. 💚|👍|👎|  |  |
+|v.s. 💰|👎|👍|  |   |
 
 ### Card Effects
 
@@ -67,6 +67,6 @@ any time and with it all cards below it will be activated as well.
 
 ### Licence
 
-![https://i.creativecommons.org/l/by-nc/4.0/88x31.png]
+![Attribution-Non Commercial 4.0 International License](https://i.creativecommons.org/l/by-nc/4.0/88x31.png)
 
-This game is licenced under a [Attribution-Non Commercial 4.0 International license](https://creativecommons.org/licenses/by-nc/4.0/).
+This game is licenced under a [Attribution-Non Commercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).

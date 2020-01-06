@@ -1,0 +1,82 @@
+[
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/1294679.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 2,
+      "y2": true,
+      "y1": 0
+    },
+    "name": "Returning Double Attack"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/2029642.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 1
+    },
+    "name": "Profit"
+  },
+  {
+    "amount": 3,
+    "img": "https://freesvg.org/img/womanmoney.png",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 1,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 1
+    },
+    "name": "Balanced Profit"
+  },
+  {
+    "amount": 3,
+    "img": "https://freesvg.org/img/1575830884suckingoutthemoney.png",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 1,
+      "r2": 0,
+      "r1": 0,
+      "y2": false,
+      "y1": 2
+    },
+    "name": " Balanced Double Sale"
+  },
+  {
+    "amount": 3,
+    "img": "https://svgsilh.com/svg/294107.svg",
+    "hasDesc": true,
+    "composition": {
+      "b2": 0,
+      "b1": 0,
+      "g2": false,
+      "g1": 0,
+      "r2": 0,
+      "r1": 1,
+      "y2": false,
+      "y1": 0
+    },
+    "name": " Attack"
+  }
+]

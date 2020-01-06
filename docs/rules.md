@@ -54,9 +54,9 @@ So called _Reaction cards_ have a special rule:
 ### Card Effects
 
 * **Draw X Cards** Draw `X` cards from the discard pile and/or the own deck.
-* **+📘📘 (+💰💰💰)** Add 📘📘 (💰💰💰) to your counters. At the end of your turn, your counter may  only cary a maximum of 6, all further resources will be lost.
-* **Action: -X Resources** An enemy loses X resources of the own choosing. The Game is lost if at the end of any turn no resources are left.
-* **Action: -X Cards** An enemy discards X cards of the own choosing. Has the player not enough card, then the remaining will be discarded from the top of the deck. The enemy has 
+* **+📘📘/💰💰💰** Add 📘📘/💰💰💰 to your counters. At the end of your turn, your counter may  only cary a maximum of 6, all further resources will be lost.
+* **Action: -X Resources** An enemy loses `X` resources of the own choosing. The Game is lost if at the end of any turn no resources are left.
+* **Action: -X Cards** An enemy discards `X` cards of the own choosing. Has the player not enough card, then the remaining will be discarded from the top of the deck. The enemy has 
 lost if no card remains in the deck at begining of the own deck.
 * **+2 Resources of one kind** Add 📘📘, 💰💰, 💥💥 or 💚💚 to your counter.
 * **Reboot** Return cards back into you hand, that have been played during this turn. 

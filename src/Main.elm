@@ -43,18 +43,24 @@ type alias Config =
     }
 
 
+type Tab
+    = EditTab
+    | DecksTab
+    | ConfigTab
+
+
 type alias Model =
     { config : Config
     , cards : Array Card
+    , currentTab : Tab
     , showGui : Bool
-    , showConfig : Bool
     , editing : Int
     }
 
 
 type Msg
-    = ToggledShowGui
-    | ToggledShowConfig Bool
+    = ChangedTab Tab
+    | ToggledShowGui
     | ChangedConfigField ConfigField
     | ChangeComponent Base Int
     | ChangeAmount Int
@@ -65,6 +71,7 @@ type Msg
     | Selected Int
     | Load
     | Save
+    | LoadFromLink String
     | GotFile File
     | GotJson String
     | GotError
@@ -83,8 +90,8 @@ update msg model =
         ToggledShowGui ->
             ( { model | showGui = not model.showGui }, Cmd.none )
 
-        ToggledShowConfig bool ->
-            ( { model | showConfig = bool }, Cmd.none )
+        ChangedTab tab ->
+            ( { model | currentTab = tab }, Cmd.none )
 
         ChangedConfigField configField ->
             let
@@ -184,6 +191,23 @@ update msg model =
                 |> Download.string "flask_cards.json" "text/json"
             )
 
+        LoadFromLink string ->
+            ( model
+            , Http.get
+                { url = string
+                , expect =
+                    Http.expectString
+                        (\result ->
+                            case result of
+                                Ok json ->
+                                    GotJson json
+
+                                Err error ->
+                                    GotError
+                        )
+                }
+            )
+
         Load ->
             ( model
             , Select.file [ "text/json" ] GotFile
@@ -237,7 +261,7 @@ init _ =
             , blackAndWhite = blackAndWhite
             }
       , showGui = True
-      , showConfig = False
+      , currentTab = EditTab
       , editing = 0
       }
     , Http.get
@@ -422,126 +446,193 @@ view model =
     <|
         if model.showGui then
             Element.paragraph (Grid.spacedEvenly ++ [ Element.width Element.fill ]) <|
-                [ Element.column (Grid.simple ++ [ Element.width Element.shrink, Element.alignRight ]) <|
+                [ Element.column
+                    (Grid.simple
+                        ++ [ Element.width <| Element.px <| 400
+                           , Element.alignRight
+                           ]
+                    )
+                  <|
                     [ Element.column Grid.compact <|
                         [ Element.row Grid.spaceEvenly <|
                             [ Input.button
                                 (Button.groupTop
-                                    ++ (if not model.showConfig then
+                                    ++ (if model.currentTab == EditTab then
                                             Color.info
 
                                         else
                                             []
                                        )
                                 )
-                                { onPress = Just <| ToggledShowConfig <| False
+                                { onPress = Just <| ChangedTab EditTab
                                 , label = Element.text <| "Edit Card"
                                 }
                             , Input.button
                                 (Button.groupTop
-                                    ++ (if model.showConfig then
+                                    ++ (if model.currentTab == DecksTab then
                                             Color.info
 
                                         else
                                             []
                                        )
                                 )
-                                { onPress = Just <| ToggledShowConfig <| True
+                                { onPress = Just <| ChangedTab DecksTab
+                                , label = Element.text <| "Community"
+                                }
+                            , Input.button
+                                (Button.groupTop
+                                    ++ (if model.currentTab == ConfigTab then
+                                            Color.info
+
+                                        else
+                                            []
+                                       )
+                                )
+                                { onPress = Just <| ChangedTab ConfigTab
                                 , label = Element.text <| "Configuration"
                                 }
                             ]
-                        , Element.column (Framework.Card.simple ++ Grid.simple ++ [ Border.rounded 0 ]) <|
-                            if model.showConfig then
-                                [ Element.row Grid.spaceEvenly <|
-                                    [ Element.el [ Element.width <| Element.fill ] <| Element.text <| "Cards Per Page"
-                                    , Input.text
-                                        ((if model.config.cardsPerPage |> FormField.unWrap |> .errors |> List.isEmpty then
-                                            []
+                        , Element.column
+                            (Framework.Card.simple
+                                ++ Grid.simple
+                                ++ [ Border.rounded 0
+                                   , Element.height <| Element.minimum 600 <| Element.shrink
+                                   ]
+                            )
+                          <|
+                            case model.currentTab of
+                                DecksTab ->
+                                    [ Element.row Grid.spaceEvenly <|
+                                        [ Element.el [ Element.width <| Element.fill ] <|
+                                            Element.text <|
+                                                "Green Deck"
+                                        , Input.button (Button.simple ++ Color.primary ++ [ Element.width <| Element.fill ]) <|
+                                            { onPress = Just <| LoadFromLink <| "https://raw.githubusercontent.com/Orasund/flask/master/deck/green.json"
+                                            , label = Element.text <| "Load"
+                                            }
+                                        ]
+                                    , Element.row Grid.spaceEvenly <|
+                                        [ Element.el [ Element.width <| Element.fill ] <|
+                                            Element.text <|
+                                                "Red Deck"
+                                        , Input.button (Button.simple ++ Color.primary ++ [ Element.width <| Element.fill ]) <|
+                                            { onPress = Just <| LoadFromLink <| "https://raw.githubusercontent.com/Orasund/flask/master/deck/red.json"
+                                            , label = Element.text <| "Load"
+                                            }
+                                        ]
+                                    , Element.row Grid.spaceEvenly <|
+                                        [ Element.el [ Element.width <| Element.fill ] <|
+                                            Element.text <|
+                                                "Yellow Deck"
+                                        , Input.button (Button.simple ++ Color.primary ++ [ Element.width <| Element.fill ]) <|
+                                            { onPress = Just <| LoadFromLink <| "https://raw.githubusercontent.com/Orasund/flask/master/deck/yellow.json"
+                                            , label = Element.text <| "Load"
+                                            }
+                                        ]
+                                    , Element.row Grid.spaceEvenly <|
+                                        [ Element.el [ Element.width <| Element.fill ] <|
+                                            Element.text <|
+                                                "Blue Deck"
+                                        , Input.button (Button.simple ++ Color.primary ++ [ Element.width <| Element.fill ]) <|
+                                            { onPress = Just <| LoadFromLink <| "https://raw.githubusercontent.com/Orasund/flask/master/deck/blue.json"
+                                            , label = Element.text <| "Load"
+                                            }
+                                        ]
+                                    ]
 
-                                          else
-                                            Color.danger
-                                         )
-                                            ++ Input.simple
-                                        )
-                                        { onChange = ChangedConfigField << CardsPerPage
-                                        , text = model.config.cardsPerPage |> FormField.unWrap |> .raw
-                                        , placeholder = Nothing
-                                        , label = Input.labelHidden "Cards Per Page"
+                                ConfigTab ->
+                                    [ Element.row Grid.spaceEvenly <|
+                                        [ Element.el [ Element.width <| Element.fill ] <|
+                                            Element.text <|
+                                                "Cards Per Page"
+                                        , Input.text
+                                            ((if model.config.cardsPerPage |> FormField.unWrap |> .errors |> List.isEmpty then
+                                                []
+
+                                              else
+                                                Color.danger
+                                             )
+                                                ++ Input.simple
+                                            )
+                                            { onChange = ChangedConfigField << CardsPerPage
+                                            , text = model.config.cardsPerPage |> FormField.unWrap |> .raw
+                                            , placeholder = Nothing
+                                            , label = Input.labelHidden "Cards Per Page"
+                                            }
+                                        ]
+                                    , ToggleInput.view
+                                        { onChange = ChangedConfigField << BlackAndWhite
+                                        , value = model.config.blackAndWhite
+                                        , label = "Black and White Mode"
                                         }
                                     ]
-                                , ToggleInput.view
-                                    { onChange = ChangedConfigField << BlackAndWhite
-                                    , value = model.config.blackAndWhite
-                                    , label = "Black and White Mode"
-                                    }
-                                ]
 
-                            else
-                                editedCard.composition
-                                    |> (\{ g1, g2, r1, r2, b1, b2, y1, y2 } ->
-                                            List.concat
-                                                [ [ Input.text Input.simple
-                                                        { onChange = ChangedName
-                                                        , text = editedCard.name
-                                                        , placeholder = Nothing
-                                                        , label = Input.labelLeft Input.label <| Element.text "Name"
-                                                        }
-                                                  , Input.text Input.simple
-                                                        { onChange = ChangedImg
-                                                        , text = editedCard.img
-                                                        , placeholder = Nothing
-                                                        , label = Input.labelLeft Input.label <| Element.text "Image Link"
-                                                        }
-                                                  , RangeInput.view
-                                                        { minValue = 1
-                                                        , maxValue = 3
-                                                        , onChange = ChangeAmount
-                                                        , value = editedCard.amount
-                                                        , label = "Amount"
-                                                        }
-                                                  , Element.row Grid.simple <|
-                                                        [ ToggleInput.view
-                                                            { onChange =
-                                                                \b ->
-                                                                    if b then
-                                                                        ChangeComponent G2 1
-
-                                                                    else
-                                                                        ChangeComponent G2 0
-                                                            , value = g2
-                                                            , label = toTitle <| G2
+                                EditTab ->
+                                    editedCard.composition
+                                        |> (\{ g1, g2, r1, r2, b1, b2, y1, y2 } ->
+                                                List.concat
+                                                    [ [ Input.text Input.simple
+                                                            { onChange = ChangedName
+                                                            , text = editedCard.name
+                                                            , placeholder = Nothing
+                                                            , label = Input.labelLeft Input.label <| Element.text "Name"
                                                             }
-                                                        , ToggleInput.view
-                                                            { onChange =
-                                                                \b ->
-                                                                    if b then
-                                                                        ChangeComponent Y2 1
-
-                                                                    else
-                                                                        ChangeComponent Y2 0
-                                                            , value = y2
-                                                            , label = toTitle <| Y2
+                                                      , Input.text Input.simple
+                                                            { onChange = ChangedImg
+                                                            , text = editedCard.img
+                                                            , placeholder = Nothing
+                                                            , label = Input.labelLeft Input.label <| Element.text "Image Link"
                                                             }
-                                                        ]
-                                                  ]
-                                                , [ ( b2, B2 ), ( b1, B1 ), ( y1, Y1 ), ( g1, G1 ), ( r1, R1 ), ( r2, R2 ) ]
-                                                    |> List.map
-                                                        (\( value, base ) ->
-                                                            RangeInput.view
-                                                                { minValue = 0
-                                                                , maxValue = 3
-                                                                , onChange = ChangeComponent base
-                                                                , value = value
-                                                                , label = base |> toTitle
+                                                      , RangeInput.view
+                                                            { minValue = 1
+                                                            , maxValue = 3
+                                                            , onChange = ChangeAmount
+                                                            , value = editedCard.amount
+                                                            , label = "Amount"
+                                                            }
+                                                      , Element.row Grid.simple <|
+                                                            [ ToggleInput.view
+                                                                { onChange =
+                                                                    \b ->
+                                                                        if b then
+                                                                            ChangeComponent G2 1
+
+                                                                        else
+                                                                            ChangeComponent G2 0
+                                                                , value = g2
+                                                                , label = toTitle <| G2
                                                                 }
-                                                        )
-                                                , [ Input.button (Button.simple ++ Color.danger ++ [ Element.alignRight ]) <|
-                                                        { onPress = Just DeletedSelected
-                                                        , label = Element.text <| "Remove"
-                                                        }
-                                                  ]
-                                                ]
-                                       )
+                                                            , ToggleInput.view
+                                                                { onChange =
+                                                                    \b ->
+                                                                        if b then
+                                                                            ChangeComponent Y2 1
+
+                                                                        else
+                                                                            ChangeComponent Y2 0
+                                                                , value = y2
+                                                                , label = toTitle <| Y2
+                                                                }
+                                                            ]
+                                                      ]
+                                                    , [ ( b2, B2 ), ( b1, B1 ), ( y1, Y1 ), ( g1, G1 ), ( r1, R1 ), ( r2, R2 ) ]
+                                                        |> List.map
+                                                            (\( value, base ) ->
+                                                                RangeInput.view
+                                                                    { minValue = 0
+                                                                    , maxValue = 3
+                                                                    , onChange = ChangeComponent base
+                                                                    , value = value
+                                                                    , label = base |> toTitle
+                                                                    }
+                                                            )
+                                                    , [ Input.button (Button.simple ++ Color.danger ++ [ Element.alignRight ]) <|
+                                                            { onPress = Just DeletedSelected
+                                                            , label = Element.text <| "Remove"
+                                                            }
+                                                      ]
+                                                    ]
+                                           )
                         ]
                     , Element.row Grid.simple
                         [ Input.button (Button.simple ++ Color.primary) <|

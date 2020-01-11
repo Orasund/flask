@@ -438,7 +438,7 @@ view model =
             Base.card >> .effect >> Effect.toTextField >> .title
     in
     (if model.showGui then
-        Framework.layout [] << Element.el Framework.container
+        Framework.responsiveLayout [] << Element.el Framework.container
 
      else
         Element.layout []

@@ -22009,6 +22009,22 @@ var $mdgriffith$elm_ui$Element$layoutWith = F3(
 	});
 var $mdgriffith$elm_ui$Element$layout = $mdgriffith$elm_ui$Element$layoutWith(
 	{options: _List_Nil});
+var $mdgriffith$elm_ui$Internal$Model$Min = F2(
+	function (a, b) {
+		return {$: 'Min', a: a, b: b};
+	});
+var $mdgriffith$elm_ui$Element$minimum = F2(
+	function (i, l) {
+		return A2($mdgriffith$elm_ui$Internal$Model$Min, i, l);
+	});
+var $elm$core$Basics$modBy = _Basics_modBy;
+var $Orasund$elm_ui_framework$Framework$Color$turquoise = A3($mdgriffith$elm_ui$Element$rgb255, 0, 209, 178);
+var $Orasund$elm_ui_framework$Framework$Color$primary = _List_fromArray(
+	[
+		$mdgriffith$elm_ui$Element$Background$color($Orasund$elm_ui_framework$Framework$Color$turquoise),
+		$mdgriffith$elm_ui$Element$Border$color($Orasund$elm_ui_framework$Framework$Color$turquoise)
+	]);
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
 var $Orasund$elm_ui_framework$Framework$Color$darkerGrey = A3($mdgriffith$elm_ui$Element$rgb255, 18, 18, 18);
 var $Orasund$elm_ui_framework$Framework$Color$light = _List_fromArray(
 	[
@@ -22026,7 +22042,6 @@ var $mdgriffith$elm_ui$Internal$Model$FocusStyleOption = function (a) {
 	return {$: 'FocusStyleOption', a: a};
 };
 var $mdgriffith$elm_ui$Element$focusStyle = $mdgriffith$elm_ui$Internal$Model$FocusStyleOption;
-var $Orasund$elm_ui_framework$Framework$Color$turquoise = A3($mdgriffith$elm_ui$Element$rgb255, 0, 209, 178);
 var $Orasund$elm_ui_framework$Framework$layoutOptions = $elm$core$List$singleton(
 	$mdgriffith$elm_ui$Element$focusStyle(
 		{
@@ -22046,20 +22061,26 @@ var $Orasund$elm_ui_framework$Framework$layout = function (attributes) {
 		{options: $Orasund$elm_ui_framework$Framework$layoutOptions},
 		_Utils_ap($Orasund$elm_ui_framework$Framework$layoutAttributes, attributes));
 };
-var $mdgriffith$elm_ui$Internal$Model$Min = F2(
-	function (a, b) {
-		return {$: 'Min', a: a, b: b};
+var $elm$html$Html$node = $elm$virtual_dom$VirtualDom$node;
+var $Orasund$elm_ui_framework$Framework$responsiveLayout = F2(
+	function (attributes, view) {
+		return A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A3(
+					$elm$html$Html$node,
+					'meta',
+					_List_fromArray(
+						[
+							A2($elm$html$Html$Attributes$attribute, 'name', 'viewport'),
+							A2($elm$html$Html$Attributes$attribute, 'content', 'width=device-width, initial-scale=1.0')
+						]),
+					_List_Nil),
+					A2($Orasund$elm_ui_framework$Framework$layout, attributes, view)
+				]));
 	});
-var $mdgriffith$elm_ui$Element$minimum = F2(
-	function (i, l) {
-		return A2($mdgriffith$elm_ui$Internal$Model$Min, i, l);
-	});
-var $elm$core$Basics$modBy = _Basics_modBy;
-var $Orasund$elm_ui_framework$Framework$Color$primary = _List_fromArray(
-	[
-		$mdgriffith$elm_ui$Element$Background$color($Orasund$elm_ui_framework$Framework$Color$turquoise),
-		$mdgriffith$elm_ui$Element$Border$color($Orasund$elm_ui_framework$Framework$Color$turquoise)
-	]);
 var $mdgriffith$elm_ui$Internal$Flag$overflow = $mdgriffith$elm_ui$Internal$Flag$flag(20);
 var $mdgriffith$elm_ui$Element$scrollbarY = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$overflow, $mdgriffith$elm_ui$Internal$Style$classes.scrollbarsY);
 var $Orasund$elm_ui_framework$Framework$Grid$simple = _List_fromArray(
@@ -22165,7 +22186,6 @@ var $mdgriffith$elm_ui$Element$Input$applyLabel = F3(
 			}
 		}
 	});
-var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
 var $mdgriffith$elm_ui$Element$Input$autofill = A2(
 	$elm$core$Basics$composeL,
 	$mdgriffith$elm_ui$Internal$Model$Attr,
@@ -23202,7 +23222,7 @@ var $author$project$Main$view = function (model) {
 				])));
 	return (model.showGui ? A2(
 		$elm$core$Basics$composeL,
-		$Orasund$elm_ui_framework$Framework$layout(_List_Nil),
+		$Orasund$elm_ui_framework$Framework$responsiveLayout(_List_Nil),
 		$mdgriffith$elm_ui$Element$el($Orasund$elm_ui_framework$Framework$container)) : $mdgriffith$elm_ui$Element$layout(_List_Nil))(
 		model.showGui ? A2(
 			$mdgriffith$elm_ui$Element$paragraph,
